@@ -70,23 +70,30 @@ class Parser:
 
     # MAIN METHODS ======================================================
     def _parse_sql(self):
-        isBlock = False # indicate whether this is a block of sql/sub-sql
-        idx = self._pos
+        isBlock = False  # indicate whether this is a block of sql/sub-sql
+        select_idx = self._pos  # Save the position of 'select'
 
         sql = {}
-        if self._peek() == '(':
+        if self._peek() == '(':  # handle block
             isBlock = True
             self._advance()
 
-        # parse from clause in order to get default tables
+        # Parse 'from' first to get default_tables
+        from_idx = self._find(self._pos, 'from')
+        assert from_idx is not None, "'from' not found"
+        self._jump(from_idx)
         table_units, conds, default_tables = self.parse_from()
         sql['from'] = {'table_units': table_units, 'conds': conds}
-        
-        # select clause
+        after_from_pos = self._pos  # Save position after 'from'
+
+        # Jump back to 'select' and parse it using default_tables
+        self._jump(select_idx)
         _, select_col_units = self.parse_select(default_tables)
         sql['select'] = select_col_units
-        
-        # where clause
+
+        # Jump forward to after 'from' to continue parsing
+        self._jump(after_from_pos)
+
         sql['where'] = self.parse_where(default_tables)
         sql['groupBy'] = self.parse_group_by(default_tables)
         sql['having'] = self.parse_having(default_tables)
@@ -101,8 +108,7 @@ class Parser:
         if isBlock:
             self._consume(')')
 
-        # intersect/union/except clause
-        for op in SQL_OPS:  # initialize IUE
+        for op in SQL_OPS:
             sql[op] = None
         if self._peek() in SQL_OPS:
             sql_op = self._pop()
@@ -154,7 +160,29 @@ class Parser:
         return table_units, conds, default_tables
     
     def parse_select(self, default_tables):
-        pass
+        select_tok = self._pop()
+        assert select_tok == 'select', "'select' not found"
+
+        isDistinct = False
+        if self._peek() == 'distinct':
+            self._advance()
+            isDistinct = True
+
+        val_units = []
+        while True:
+            agg_id = AGG_OPS.index("none")
+            if self._peek() in AGG_OPS:
+                agg_id = AGG_OPS.index(self._pop())
+            val_unit = self.parse_val_unit(default_tables)
+            val_units.append((agg_id, val_unit))
+            if self._peek() == ',':
+                self._advance()  # skip ','
+            else:
+                break
+            if self._peek() in CLAUSE_KEYWORDS or self._peek() in (")", ";", None):
+                break
+
+        return None, (isDistinct, val_units)
     
     def parse_table_unit(self):
         """Return table id, table real name, advance the position."""
@@ -177,7 +205,7 @@ class Parser:
         conds = []
 
         while self._pos < len(self._toks):
-            val_unit = self.parse_val_unit()
+            val_unit = self.parse_val_unit(default_tables)
             not_op = False
             if self._peek() == 'not':
                 not_op = True
@@ -208,8 +236,178 @@ class Parser:
                 conds.append(self._pop())   # append the AND/OR operator (connector)
         return conds
     
-    def parse_val_unit(self):
-        pass
+    def parse_val_unit(self, default_tables=None):
+        """
+        Parse a value unit. Which can be a column unit, or an expression with unit operations.
+
+        :param default_tables: List of default tables to resolve column names.
+        :returns: (unit_op, col_unit1, col_unit2), if unit_op is 'none', the tuple would be (0, col_unit1, None).
+        """
+        isBlock = False
+        if self._peek() == '(':
+            isBlock = True
+            self._advance()
+
+        col_unit1 = self.parse_col_unit(default_tables)
+        col_unit2 = None
+        unit_op = UNIT_OPS.index('none')
+
+        if self._peek() in UNIT_OPS:
+            unit_op = UNIT_OPS.index(self._pop())
+            col_unit2 = self.parse_col_unit(default_tables)
+
+        if isBlock:
+            self._consume(')')
+
+        return (unit_op, col_unit1, col_unit2)
     
     def parse_value(self, default_tables):
-        
+        value_tok = self._peek()
+        # case value is a literal string
+        if (value_tok.startswith('"') and value_tok.endswith('"')) or (value_tok.startswith("'") and value_tok.endswith("'")):
+            val = self._pop()
+            return val
+        # case value is a number
+        try:
+            val = float(self._pop())
+            return val
+        except (ValueError, TypeError):
+            # case value is a column unit or expression
+            val = self.parse_col_unit(default_tables)
+            return val
+
+    def parse_col_unit(self, default_tables):
+        """
+        Parse a column unit, handle the possibility of aggregation and/or distinct.
+
+        :returns: a tuple (agg_op id, col_id, isDistinct)
+        """
+        isBlock = False
+        isDistinct = False
+
+        if self._peek() == '(':  # handle block
+            isBlock = True
+            self._advance()
+
+        # aggregation operator
+        agg_id = AGG_OPS.index("none")
+        if self._peek() in AGG_OPS:
+            agg_id = AGG_OPS.index(self._pop())
+            self._consume('(')
+            if self._peek() == "distinct":
+                self._advance()
+                isDistinct = True
+            col_id = self.parse_col(default_tables)
+            self._consume(')')
+            if isBlock:
+                self._consume(')')
+            return (agg_id, col_id, isDistinct)
+
+        if self._peek() == "distinct":
+            self._advance()
+            isDistinct = True
+
+        col_id = self.parse_col(default_tables)
+        if isBlock:
+            self._consume(')')
+        return (agg_id, col_id, isDistinct)
+    
+    def parse_col(self, default_tables):
+        """
+            :returns column id advance the position.
+        """
+        col_tok = self.peek()
+        if col_tok == "*":
+            self._advance()
+            return self._schema.idMap[col_tok]
+
+        if '.' in col_tok:  # if token is a composite - e.g. table_a.col_b
+            alias, col = col_tok.split('.')
+            key = self._alias_tables[alias] + "." + col
+            self._advance()
+            return self._schema.idMap[key]
+
+        assert default_tables is not None and len(default_tables) > 0, "Default tables should not be None or empty"
+
+        for alias in default_tables:
+            table = self._alias_tables[alias]
+            if col_tok in self._schema.schema_dict[table]:   # find in each table's columns
+                key = table + "." + col_tok
+                self._advance()
+                return self._schema.idMap[key]
+
+        assert False, "Error col: {}".format(col_tok)
+
+    def parse_where(self, default_tables):
+        """
+        :returns: a list of conditions
+        """
+        if self._peek() != 'where':
+            return []
+        self._advance()  # skip 'where'
+        return self.parse_condition(default_tables)
+
+    def parse_group_by(self, default_tables):
+        """
+        :returns: a list of column units to group by.
+        """
+        if self._peek() != 'group':
+            return []
+        self._advance()  # skip 'group'
+        self._consume('by')
+        col_units = []
+        while True:
+            col_unit = self.parse_col_unit(default_tables)
+            col_units.append(col_unit)
+            if self._peek() == ',':
+                self._advance()
+            else:
+                break
+            if self._peek() in CLAUSE_KEYWORDS or self._peek() in (")", ";", None):
+                break
+        return col_units
+
+    def parse_having(self, default_tables):
+        """
+        :returns: a list of conditions in the HAVING clause.
+        """
+        if self._peek() != 'having':
+            return []
+        self._advance()  # skip 'having'
+        return self.parse_condition(default_tables)
+
+    def parse_order_by(self, default_tables):
+        """
+        returns: a tuple (order, col_units) where order is 'asc' or 'desc',
+        """
+        if self._peek() != 'order':
+            return None
+        self._advance()  # skip 'order'
+        self._consume('by')
+        order = 'asc'  # default order
+        if self._peek() in ('asc', 'desc'):
+            order = self._pop()
+        col_units = []
+        while True:
+            col_unit = self.parse_col_unit(default_tables)
+            col_units.append(col_unit)
+            if self._peek() == ',':
+                self._advance()
+            else:
+                break
+            if self._peek() in CLAUSE_KEYWORDS or self._peek() in (")", ";", None):
+                break
+        return (order, col_units)
+
+    def parse_limit(self):
+        """
+        :returns: an integer limit value if 'limit' is present, otherwise None.
+        """
+        if self._peek() != 'limit':
+            return None
+        self._advance()  # skip 'limit'
+        limit_val = self._pop()
+        try:
+            return int(limit_val)
+        except ValueError:
+            raise ValueError(f"Invalid LIMIT value: {limit_val}")

@@ -1,12 +1,13 @@
 import json
 import sqlite3
+from typing import Dict, List
 
 class Schema:
     """
     Simple schema which maps each column from each table to a unique identifier
     """
     def __init__(self, schema):
-        self._schema = schema
+        self._schema: Dict[str, List[str]] = schema
         self._idMap = self._map(self._schema)
 
     @property
