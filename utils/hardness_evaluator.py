@@ -1,4 +1,4 @@
-from constants import *
+from .constants import *
 HARDNESS = {
     "component1": ('where', 'group', 'order', 'limit', 'join', 'or', 'like'),
     "component2": ('except', 'union', 'intersect')
@@ -10,12 +10,12 @@ class HardnessEvaluator:
     """
 
     def __init__(self, query):
-        self.query = query
+        self.sql = query
 
-    def eval_hardness(self, sql):
-        count_comp1_ = self.count_component1(sql)
-        count_comp2_ = self.count_component2(sql)
-        count_others_ = self.count_others(sql)
+    def eval_hardness(self):
+        count_comp1_ = self.count_component1()
+        count_comp2_ = self.count_component2()
+        count_others_ = self.count_others()
 
         if count_comp1_ <= 1 and count_others_ == 0 and count_comp2_ == 0:
             return "easy"
@@ -108,3 +108,10 @@ class HardnessEvaluator:
             count += 1
 
         return count
+
+    
+    def count_agg(self, units):
+        return len([unit for unit in units if self.has_agg(unit)])
+    
+    def has_agg(self, unit):
+        return unit[0] != AGG_OPS.index('none')

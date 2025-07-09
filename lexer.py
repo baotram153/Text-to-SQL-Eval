@@ -4,44 +4,48 @@ from utils.schema import Schema
 class Lexer:
     def __init__(self, string):
         self._string = string
-        self._toks = self.tokenize(string)
+        self._toks = self.tokenize()
         self._alias_tables = self.scan_alias()   
         
     @property
     def toks(self):
         return self._toks
     
-    def tokenize(string):
-        string = str(string)
-        string = string.replace("\'", "\"")     # ensure all strings are wrapped in double quotes instead of single quotes
-        quote_idxs = [idx for idx, char in enumerate(string) if char == '"']
+    def tokenize(self):
+        """
+        Tokenize the input SQL string, preserving quoted strings as single tokens and handling operators like !=, >=, <=.
+        Returns a list of tokens (all lowercased, except quoted strings).
+        """
+        s = str(self._string)
+        s = s.replace("'", '"')  # unify quotes
+        quote_idxs = [idx for idx, char in enumerate(s) if char == '"']
         assert len(quote_idxs) % 2 == 0, "Unexpected quote"
 
-        # keep string value as token
+        # Extract quoted values and replace with placeholders
         vals = {}
-        for i in range(len(quote_idxs)-1, -1, -2):
+        s_work = s
+        for i in range(len(quote_idxs) - 1, 0, -2):
             qidx1 = quote_idxs[i-1]
             qidx2 = quote_idxs[i]
-            val = string[qidx1: qidx2+1]
-            key = "__val_{}_{}__".format(qidx1, qidx2)
-            string = string[:qidx1] + key + string[qidx2+1:]
+            val = s[qidx1:qidx2+1]
+            key = f"__val_{qidx1}_{qidx2}__"
+            s_work = s_work[:qidx1] + key + s_work[qidx2+1:]
             vals[key] = val
 
-        toks = [word.lower() for word in word_tokenize(string)]
-        # replace with string value token
-        for i in range(len(toks)):
-            if toks[i] in vals:
-                toks[i] = vals[toks[i]]
+        # Tokenize (lowercase except for value placeholders)
+        toks = [word.lower() for word in word_tokenize(s_work)]
+        for i, tok in enumerate(toks):
+            if tok in vals:
+                toks[i] = vals[tok]  # restore quoted value
 
-        # find if there exists !=, >=, <=
-        eq_idxs = [idx for idx, tok in enumerate(toks) if tok == "="]
-        eq_idxs.reverse()
-        prefix = ('!', '>', '<')
-        for eq_idx in eq_idxs:
-            pre_tok = toks[eq_idx-1]
-            if pre_tok in prefix:
-                toks = toks[:eq_idx-1] + [pre_tok + "="] + toks[eq_idx+1: ]
-
+        # Merge operators (!=, >=, <=)
+        i = 1
+        while i < len(toks):
+            if toks[i] == '=' and toks[i-1] in ('!', '>', '<'):
+                toks[i-1] = toks[i-1] + '='
+                del toks[i]
+            else:
+                i += 1
         return toks
     
     def scan_alias(self):
@@ -63,6 +67,6 @@ class Lexer:
         :returns: dict with alias as key and table/column name as value
         """
         for key in schema.schema_dict:
-            assert key not in self.alias_tables, "Alias {} has the same name in table".format(key)
-            self.alias_tables[key] = key
-        return self.alias_tables
+            assert key not in self._alias_tables, "Alias {} has the same name in table".format(key)
+            self._alias_tables[key] = key
+        return self._alias_tables

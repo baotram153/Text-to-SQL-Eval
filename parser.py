@@ -17,7 +17,7 @@ class Parser:
         
     def parse(self):
         """Parse the SQL query from the lexer tokens."""
-        _, sql = self._parse_sql()
+        sql = self._parse_sql()
         self._expect_end()
         return sql
     
@@ -44,7 +44,7 @@ class Parser:
         
     def _jump(self, idx: int):
         """Jump to a specific index in the tokens."""
-        if 0 <= idx < len(self._toks):
+        if 0 <= idx <= len(self._toks):
             self._pos = idx
         else:
             raise ValueError(f"Index {idx} is out of bounds for tokens of length {len(self._toks)}.")
@@ -317,7 +317,7 @@ class Parser:
         """
             :returns column id advance the position.
         """
-        col_tok = self.peek()
+        col_tok = self._peek()
         if col_tok == "*":
             self._advance()
             return self._schema.idMap[col_tok]
@@ -379,26 +379,30 @@ class Parser:
 
     def parse_order_by(self, default_tables):
         """
-        returns: a tuple (order, col_units) where order is 'asc' or 'desc',
+        Returns: a tuple (order_type, val_units) where order_type is 'asc' or 'desc',
+        and val_units is a list of value units to order by.
         """
+        val_units = []
+        order_type = 'asc'  # default type is 'asc'
+
         if self._peek() != 'order':
-            return None
+            return val_units
         self._advance()  # skip 'order'
         self._consume('by')
-        order = 'asc'  # default order
-        if self._peek() in ('asc', 'desc'):
-            order = self._pop()
-        col_units = []
+
         while True:
-            col_unit = self.parse_col_unit(default_tables)
-            col_units.append(col_unit)
+            val_unit = self.parse_val_unit(default_tables)
+            val_units.append(val_unit)
+            if self._peek() in ORDER_OPS:
+                order_type = self._pop()
             if self._peek() == ',':
-                self._advance()
+                self._advance()  # skip ','
             else:
                 break
             if self._peek() in CLAUSE_KEYWORDS or self._peek() in (")", ";", None):
                 break
-        return (order, col_units)
+
+        return (order_type, val_units)
 
     def parse_limit(self):
         """

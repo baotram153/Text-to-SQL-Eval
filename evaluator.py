@@ -212,7 +212,7 @@ class Evaluator:
         cnt = cnt1 + cnt2 + cnt3
         return label_total, pred_total, cnt
 
-    def get_keywords(sql):
+    def get_keywords(self, sql):
         res = set()
         if len(sql['where']) > 0:
             res.add('where')
