@@ -201,6 +201,7 @@ class Parser:
         '''
             :returns conds: list of conditions in the form:
             [condition1, 'and', condition2, 'or', condition3, ...]
+            where condition is a tuple of the form: (not_op, op_id, val_unit, val1, val2)
         '''
         conds = []
 
