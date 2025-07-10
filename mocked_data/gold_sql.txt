@@ -1,1 +1,21 @@
 SELECT ID, NAME FROM USERS	USERS
+
+average number of cars by branch
+
+SELECT
+  "car_retails_products"."productvendor" AS "crp_p_0aa5b5",
+  AVG("car_retails_products"."buyprice") AS "avg_buy_price"
+FROM
+  "car_retails"."products" "car_retails_products"
+GROUP BY
+  1
+ORDER BY
+  2 DESC,
+  1 ASC
+
+SELECT
+  COUNT("car_retails_products"."productcode") AS "car_count"
+FROM
+  "car_retails"."products" "car_retails_products"
+ORDER BY
+  1 DESC

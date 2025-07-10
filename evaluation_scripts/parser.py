@@ -80,7 +80,7 @@ class Parser:
 
         # Parse 'from' first to get default_tables
         from_idx = self._find(self._pos, 'from')
-        assert from_idx is not None, "'from' not found"
+        assert from_idx is not None, f"'from' not found {self._toks}"
         self._jump(from_idx)
         table_units, conds, default_tables = self.parse_from()
         sql['from'] = {'table_units': table_units, 'conds': conds}
@@ -194,7 +194,10 @@ class Parser:
         # advance the posion if needed
         if self._peek() == 'as':
             self._advance(n=2)  # skip 'as' and the alias token
-            
+        try:
+            self._schema.idMap[actual_table_name]
+        except:
+            raise Exception(f"Table {actual_table_name} not found in idMap, Schema: {self._schema.idMap}")
         return self._schema.idMap[actual_table_name], actual_table_name
 
     def parse_condition(self, default_tables):
@@ -318,6 +321,7 @@ class Parser:
             :returns column id advance the position.
         """
         col_tok = self._peek()
+        print(f"col_tok: {col_tok}")
         if col_tok == "*":
             self._advance()
             return self._schema.idMap[col_tok]
@@ -383,6 +387,8 @@ class Parser:
         and val_units is a list of value units to order by.
         """
         val_units = []
+        column_order_units = []
+
         order_type = 'asc'  # default type is 'asc'
 
         if self._peek() != 'order':
@@ -391,18 +397,26 @@ class Parser:
         self._consume('by')
 
         while True:
-            val_unit = self.parse_val_unit(default_tables)
-            val_units.append(val_unit)
-            if self._peek() in ORDER_OPS:
-                order_type = self._pop()
+            print(self._peek())
+            # check if the next token is a number
+            try:
+                next_tok = int(self._peek())
+                self._advance()
+                column_order_units.append(next_tok)
+                if self._peek() in ORDER_OPS:
+                    order_type = self._pop()
+            except ValueError:
+                val_unit = self.parse_val_unit(default_tables)
+                val_units.append(val_unit)
+                if self._peek() in ORDER_OPS:
+                    order_type = self._pop()
             if self._peek() == ',':
                 self._advance()  # skip ','
             else:
                 break
             if self._peek() in CLAUSE_KEYWORDS or self._peek() in (")", ";", None):
                 break
-
-        return (order_type, val_units)
+        return (order_type, val_units, column_order_units)
 
     def parse_limit(self):
         """
