@@ -55,13 +55,25 @@ def collect_pred_from_dir(pred_dir):
 def collect_pred_from_yaml(pred_file):
     pass
 
-def evaluate(gold, predict_dir, table_json, db_dir, etype, kmaps):
+def evaluate(gold, predict_dir, pred_table_file, label_table_file, table_json, db_dir, etype, kmaps):
     evaluator = Evaluator()
     rebuilder = Rebuilder()
 
-    prepare_data_dir()
-    glist = collect_labels_from_yaml(gold)
-    plist = collect_pred_from_dir(pred_dir=os.getenv('TEST_AQUA_BENCHMARK_DIRECTORY', predict_dir))
+    # prepare_data_dir()
+    # glist = collect_labels_from_yaml(gold)
+    # plist = collect_pred_from_dir(pred_dir=os.getenv('TEST_AQUA_BENCHMARK_DIRECTORY', predict_dir))
+    
+    with open(gold, 'r', encoding='utf-8') as f:
+        # glist = f.readlines()
+        glist = ' '.join(f.readlines())
+    
+    with open(predict_dir, 'r', encoding='utf-8') as f:
+        plist = ' '.join(f.readlines())
+    
+    glist = [glist]
+    plist = [plist]
+    print(glist)
+    print(plist)
 
     levels = ['easy', 'medium', 'hard', 'extra', 'all']
     partial_types = ['select', 'select(no AGG)', 'where', 'where(no OP)', 'group(no Having)',
@@ -78,9 +90,9 @@ def evaluate(gold, predict_dir, table_json, db_dir, etype, kmaps):
     eval_err_num = 0
     for p, g in zip(plist, glist):
         p_str = p
-        g_str, db = g
-        db_name = db
-        db = os.path.join(db_dir, db, db + ".sqlite")
+        g_str = g
+        # db_name = db
+        # db = os.path.join(db_dir, db, db + ".sqlite")
         schema_name, schema = get_schema_from_json(table_json)
         schema = Schema(schema, schema_name)  # Example schema, replace with actual schema loading
         print(f"g_str: {g_str}, p_str: {p_str}")
@@ -123,7 +135,8 @@ def evaluate(gold, predict_dir, table_json, db_dir, etype, kmaps):
         print(f"g_sql: {g_sql}, p_sql: {p_sql}")
 
         # rebuild sql for value evaluation
-        kmap = kmaps[db_name]
+        # kmap = kmaps[db_name]
+        kmap = kmaps['car_retails']
         g_valid_col_units = rebuilder.build_valid_col_units(g_sql['from']['table_units'], schema)
         g_sql = rebuilder.rebuild_sql_val(g_sql)
         g_sql = rebuilder.rebuild_sql_col(g_valid_col_units, g_sql, kmap)
@@ -132,7 +145,9 @@ def evaluate(gold, predict_dir, table_json, db_dir, etype, kmaps):
         p_sql = rebuilder.rebuild_sql_col(p_valid_col_units, p_sql, kmap)
 
         if etype in ["all", "exec"]:
-            exec_score = evaluator.eval_exec_match(db, p_str, g_str, p_sql, g_sql)
+            # exec_score = evaluator.eval_exec_match(db, p_str, g_str, p_sql, g_sql)
+            exec_score = evaluator.eval_exec_match(pred_table_file, label_table_file)
+            print(exec_score)
             if exec_score:
                 scores[hardness]['exec'] += 1.0
                 scores['all']['exec'] += 1.0
@@ -206,12 +221,16 @@ if __name__ == "__main__":
     parser.add_argument('--db', dest='db', type=str)
     parser.add_argument('--table', dest='table', type=str)
     parser.add_argument('--etype', dest='etype', type=str)
+    parser.add_argument('--pred_table', dest='pred_table', type=str, default='mocked_data/pred_res.json')
+    parser.add_argument('--label_table', dest='label_table', type=str, default='mocked_data/label_res.json')
     args = parser.parse_args()
 
     # gold = args.gold
     # pred = args.pred
     gold_dir = args.gold
     pred_dir = args.pred
+    pred_table_file = args.pred_table
+    label_table_file = args.label_table
     db_dir = args.db
     table = args.table
     etype = args.etype
@@ -220,4 +239,4 @@ if __name__ == "__main__":
 
     kmaps = Rebuilder().build_foreign_key_map_from_json(table)
 
-    evaluate(gold_dir, pred_dir, table, db_dir, etype, kmaps)
+    evaluate(gold_dir, pred_dir, pred_table_file, label_table_file, table, db_dir, etype, kmaps)

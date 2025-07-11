@@ -14,6 +14,7 @@ class Parser:
         self._alias_tables: Dict[str, str] = self._lexer.get_merged_alias_table(self._schema)   # TODO: Can we construct this table on the go? -> reduce 1 pass through the sql string
         self._toks: List[str] = self._lexer.toks
         self._pos: int = 0
+        self._sql = {}
         
     def parse(self):
         """Parse the SQL query from the lexer tokens."""
@@ -73,7 +74,7 @@ class Parser:
         isBlock = False  # indicate whether this is a block of sql/sub-sql
         select_idx = self._pos  # Save the position of 'select'
 
-        sql = {}
+        self._sql = {}
         if self._peek() == '(':  # handle block
             isBlock = True
             self._advance()
@@ -83,22 +84,22 @@ class Parser:
         assert from_idx is not None, f"'from' not found {self._toks}"
         self._jump(from_idx)
         table_units, conds, default_tables = self.parse_from()
-        sql['from'] = {'table_units': table_units, 'conds': conds}
+        self._sql['from'] = {'table_units': table_units, 'conds': conds}
         after_from_pos = self._pos  # Save position after 'from'
 
         # Jump back to 'select' and parse it using default_tables
         self._jump(select_idx)
         _, select_col_units = self.parse_select(default_tables)
-        sql['select'] = select_col_units
+        self._sql['select'] = select_col_units
 
         # Jump forward to after 'from' to continue parsing
         self._jump(after_from_pos)
 
-        sql['where'] = self.parse_where(default_tables)
-        sql['groupBy'] = self.parse_group_by(default_tables)
-        sql['having'] = self.parse_having(default_tables)
-        sql['orderBy'] = self.parse_order_by(default_tables)
-        sql['limit'] = self.parse_limit()
+        self._sql['where'] = self.parse_where(default_tables)
+        self._sql['groupBy'] = self.parse_group_by(default_tables)
+        self._sql['having'] = self.parse_having(default_tables)
+        self._sql['orderBy'] = self.parse_order_by(default_tables)
+        self._sql['limit'] = self.parse_limit()
 
         # skip semicolon if present
         while self._peek() == ';':
@@ -109,12 +110,12 @@ class Parser:
             self._consume(')')
 
         for op in SQL_OPS:
-            sql[op] = None
+            self._sql[op] = None
         if self._peek() in SQL_OPS:
             sql_op = self._pop()
             IUE_sql = self.parse_sql()
-            sql[sql_op] = IUE_sql
-        return sql
+            self._sql[sql_op] = IUE_sql
+        return self._sql
     
     def parse_from(self):
         """
@@ -170,6 +171,7 @@ class Parser:
 
         val_units = []
         while True:
+            print(f"In select: {self._peek()}")
             agg_id = AGG_OPS.index("none")
             if self._peek() in AGG_OPS:
                 agg_id = AGG_OPS.index(self._pop())
@@ -177,6 +179,11 @@ class Parser:
             val_units.append((agg_id, val_unit))
             if self._peek() == ',':
                 self._advance()  # skip ','
+            elif self._peek() == 'as':  # skip 'as id ,'
+                if self._peek(2) == ',':
+                    self._advance(3)
+                else:
+                    self._advance(2)
             else:
                 break
             if self._peek() in CLAUSE_KEYWORDS or self._peek() in (")", ";", None):
@@ -314,6 +321,7 @@ class Parser:
         col_id = self.parse_col(default_tables)
         if isBlock:
             self._consume(')')
+            
         return (agg_id, col_id, isDistinct)
     
     def parse_col(self, default_tables):
@@ -322,6 +330,7 @@ class Parser:
         """
         col_tok = self._peek()
         print(f"col_tok: {col_tok}")
+        # print(self._lexer.toks)
         if col_tok == "*":
             self._advance()
             return self._schema.idMap[col_tok]
@@ -354,22 +363,30 @@ class Parser:
 
     def parse_group_by(self, default_tables):
         """
-        :returns: a list of column units to group by.
+        :returns: a tuple (col_units, column_group_units), where one is always empty.
         """
         if self._peek() != 'group':
             return []
         self._advance()  # skip 'group'
         self._consume('by')
         col_units = []
+        print(self._sql['select'])
         while True:
-            col_unit = self.parse_col_unit(default_tables)
-            col_units.append(col_unit)
-            if self._peek() == ',':
+            try:
+                next_tok = int(self._peek())
                 self._advance()
+                col_unit = self._sql['select'][1][next_tok-1][1][1]  # get the column unit from select
+                col_units.append(col_unit)
+            except (ValueError, TypeError):
+                col_unit = self.parse_col_unit(default_tables)
+                col_units.append(col_unit)
+            if self._peek() == ',':
+                self._advance()  # skip ','
             else:
                 break
             if self._peek() in CLAUSE_KEYWORDS or self._peek() in (")", ";", None):
                 break
+        # only one of col_units or column_group_units should be non-empty
         return col_units
 
     def parse_having(self, default_tables):
@@ -387,14 +404,15 @@ class Parser:
         and val_units is a list of value units to order by.
         """
         val_units = []
-        column_order_units = []
 
-        order_type = 'asc'  # default type is 'asc'
+        order_types = []  # default type is 'asc'
 
         if self._peek() != 'order':
             return val_units
         self._advance()  # skip 'order'
         self._consume('by')
+        
+        print(self._lexer.toks)
 
         while True:
             print(self._peek())
@@ -402,21 +420,28 @@ class Parser:
             try:
                 next_tok = int(self._peek())
                 self._advance()
-                column_order_units.append(next_tok)
+                print(f"next_tok: {next_tok}")
+                print(f"self._sql['select'][1]: {self._sql['select'][1]}")
+                val_unit = list(self._sql['select'][1][next_tok-1][1])  # get the value unit from select
+                val_unit_1_list = list(val_unit[1])
+                val_unit_1_list[0] = self._sql['select'][1][next_tok-1][0]
+                val_unit[1] = tuple(val_unit_1_list)
+                val_unit = tuple(val_unit)
+                val_units.append(tuple(val_unit))
                 if self._peek() in ORDER_OPS:
-                    order_type = self._pop()
+                    order_types.append(self._pop())
             except ValueError:
                 val_unit = self.parse_val_unit(default_tables)
                 val_units.append(val_unit)
                 if self._peek() in ORDER_OPS:
-                    order_type = self._pop()
+                    order_types.append(self._pop())
             if self._peek() == ',':
                 self._advance()  # skip ','
             else:
                 break
             if self._peek() in CLAUSE_KEYWORDS or self._peek() in (")", ";", None):
                 break
-        return (order_type, val_units, column_order_units)
+        return (order_types, val_units)
 
     def parse_limit(self):
         """

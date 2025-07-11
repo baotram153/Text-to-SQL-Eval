@@ -52,7 +52,7 @@ class Rebuilder:
         return sql
 
 
-    # Rebuild SQL functions for foreign key evaluation
+    # rebuild SQL functions for foreign key evaluation
     def build_valid_col_units(self, table_units, schema):
         col_ids = [table_unit[1] for table_unit in table_units if table_unit[0] == TABLE_TYPE['table_unit']]
         prefixs = [col_id[:-2] for col_id in col_ids]
@@ -137,10 +137,11 @@ class Rebuilder:
 
 
     def rebuild_group_by_col(self, valid_col_units, group_by, kmap):
-        if group_by is None:
+        if group_by[0] is []:
             return group_by
+        print(group_by)
 
-        return [self.rebuild_col_unit_col(valid_col_units, col_unit, kmap) for col_unit in group_by]
+        return [self.rebuild_col_unit_col(valid_col_units, col_unit, kmap) for col_unit in group_by[0]]
 
 
     def rebuild_order_by_col(self, valid_col_units, order_by, kmap):

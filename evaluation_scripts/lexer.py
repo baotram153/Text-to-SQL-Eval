@@ -1,10 +1,12 @@
 from nltk.tokenize import word_tokenize
 from utils.schema import Schema
+from utils.constants import *
 
 class Lexer:
     def __init__(self, string, schema: Schema = None):
         self._string = string
         self._schema = schema
+        self._type_dict = {}
         self._toks = self.tokenize()
         self._alias_tables = self.scan_alias()
 
@@ -25,8 +27,8 @@ class Lexer:
         vals = {}
         s_work = s
         
-        # handle quotes: 
-        # - elimiate  quotes for single word values (handle column/table names with quotes)
+        # handle quotes (heuristic): 
+        # - elimiate quotes for single word values (handle column/table names with quotes)
         # - otherwise, handle all words in quotes as single token
         for i in range(len(quote_idxs) - 1, 0, -2):
             qidx1 = quote_idxs[i-1]
@@ -46,6 +48,10 @@ class Lexer:
         print(f"Vals: {vals}")
         toks = [word.lower() for word in word_tokenize(s_work)]
         for i, tok in enumerate(toks):
+            if tok in KEYWORDS:
+                self._type_dict[i] = 'kw'
+            else:
+                self._type_dict[i] = 'id'
             if tok in vals:
                 toks[i] = vals[tok]  # restore quoted value
                 print(f"Tokenized: {tok} -> {toks[i]}")
@@ -69,11 +75,21 @@ class Lexer:
         e.g. {'c': 'city', 'co': 'country', ...}
         TODO: Only table alias is used downstream, should we remove column alias?
         '''
-        as_idxs = [idx for idx, tok in enumerate(self.toks) if tok == 'as']
-        print(f"Alias indexes: {as_idxs} for tokens: {self.toks}")
         alias = {}
-        for idx in as_idxs:
-            alias[self.toks[idx+1]] = self.toks[idx-1]
+        print(self.toks)
+        
+        for idx in range(len(self.toks) - 2, -1, -1):
+            if self.toks[idx] == 'as':
+                print(f"Found alias: {self.toks[idx+1]} -> {self.toks[idx-1]}")
+                alias[self.toks[idx+1]] = self.toks[idx-1]
+            if (self._type_dict[idx] == self._type_dict[idx + 1] == 'id'
+                and self.toks[idx]   not in ('(', ')', ',')
+                and self.toks[idx+1] not in ('(', ')', ',')):
+                alias[self.toks[idx + 1]] = self.toks[idx]
+
+                print(f"Removing alias: {self.toks[idx+1]} -> {self.toks[idx]}")
+                self.toks.pop(idx + 1)
+                self._type_dict.pop(idx + 1)
         return alias
     
     def get_merged_alias_table(self, schema: Schema) -> dict:

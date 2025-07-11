@@ -1,5 +1,9 @@
 from utils.constants import *
 import sqlite3
+import datetime
+from typing import List, Any, Tuple
+import json
+
 class Evaluator:
     def __init__(self):
         self.partial_scores = None
@@ -34,7 +38,9 @@ class Evaluator:
         acc, rec, f1 = self.get_scores(cnt_wo_agg, pred_total, label_total)
         res['where(no OP)'] = {'acc': acc, 'rec': rec, 'f1': f1,'label_total':label_total,'pred_total':pred_total}
 
+        print(f"Evaluating group by: pred: {pred['groupBy']}, label: {label['groupBy']}")
         label_total, pred_total, cnt = self.eval_group(pred, label)
+        print(f"Group by evaluation: label_total: {label_total}, pred_total: {pred_total}, count: {cnt}")
         acc, rec, f1 = self.get_scores(cnt, pred_total, label_total)
         res['group(no Having)'] = {'acc': acc, 'rec': rec, 'f1': f1,'label_total':label_total,'pred_total':pred_total}
 
@@ -86,6 +92,62 @@ class Evaluator:
         p_val_units = [unit[1] for unit in pred['select'][1]]
         q_val_units = [unit[1] for unit in gold['select'][1]]
         return res_map(p_res, p_val_units) == res_map(q_res, q_val_units)
+    
+    def normalize_table(self, table: List[List[Any]],
+                *,
+                ordered: bool = False,
+                epsilon: float = 1e-6) -> List[Any]:
+        if not table:                                    # empty result
+            return []
+
+        header, rows = table[0], table[1:]
+
+        # column order
+        if ordered:
+            order = list(range(len(header)))
+            new_header = header[:]
+        else:
+            order = [i for i, _ in sorted(enumerate(header), key=lambda p: p[1])]
+            new_header = [header[i] for i in order]
+
+        def norm(val: Any) -> Any:                       # cell normaliser
+            if val is None or (isinstance(val, str) and val.strip().upper() == "NULL"):
+                return None
+            if isinstance(val, (int, float)):            # numeric → rounded
+                return round(float(val), 6) if isinstance(val, float) else val
+            if isinstance(val, str):
+                # numeric disguised as str?
+                try:
+                    f = float(val)
+                    return round(f, 6) if abs(f - int(f)) >= epsilon else int(round(f))
+                except ValueError:
+                    pass
+                # date formats → ISO
+                for fmt in ("%Y-%m-%d", "%d/%m/%Y", "%m/%d/%Y"):
+                    try:
+                        return datetime.datetime.strptime(val.strip(), fmt).date().isoformat()
+                    except ValueError:
+                        continue
+                return val.strip()                       # generic string
+            return val                                   # any other type
+
+        norm_rows: List[Tuple[Any, ...]] = [
+            [norm(row[i]) for i in order] for row in rows
+        ]
+
+        if not ordered:                                  # stable comparison order
+            norm_rows.sort(key=lambda r: tuple("" if x is None else str(x) for x in r))
+
+        return [new_header] + norm_rows
+
+    def eval_exec_match(self, pred_table_file, label_table_file):
+        pred_table = json.load(open(pred_table_file, 'r'))
+        label_table = json.load(open(label_table_file, 'r'))
+        
+        normalized_pred = self.normalize_table(pred_table)
+        print(f"Pred table: {normalized_pred}")
+        print(f"Label table: {label_table}")
+        return normalized_pred == label_table
 
     def get_scores(self, count, pred_total, label_total):
         """
@@ -182,14 +244,19 @@ class Evaluator:
 
 
     def eval_order(self, pred, label):
+        print(f"Evaluating order by: pred: {pred['orderBy']}, label: {label['orderBy']}")
         pred_total = label_total = cnt = 0
         if len(pred['orderBy']) > 0:
             pred_total = 1
         if len(label['orderBy']) > 0:
             label_total = 1
-        if len(label['orderBy']) > 0 and pred['orderBy'] == label['orderBy'] and \
+        print(len(label['orderBy'][1]), len(pred['orderBy'][1]))
+        print(pred['orderBy'][1])
+        print(label['orderBy'][1])
+        if len(label['orderBy'][1]) > 0 and pred['orderBy'][1] == label['orderBy'][1] and \
                 ((pred['limit'] is None and label['limit'] is None) or (pred['limit'] is not None and label['limit'] is not None)):
             cnt = 1
+        print(f"Order by evaluation: label_total: {label_total}, pred_total: {pred_total}, count: {cnt}")
         return label_total, pred_total, cnt
 
 
@@ -221,7 +288,7 @@ class Evaluator:
         if len(sql['having']) > 0:
             res.add('having')
         if len(sql['orderBy']) > 0:
-            res.add(sql['orderBy'][0])
+            res.update(sql['orderBy'][0])
             res.add('order')
         if sql['limit'] is not None:
             res.add('limit')

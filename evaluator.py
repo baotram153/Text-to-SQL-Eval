@@ -1,5 +1,7 @@
 from utils.constants import *
 import sqlite3
+from typing import List, Any, Tuple
+
 class Evaluator:
     def __init__(self):
         self.partial_scores = None
@@ -86,6 +88,9 @@ class Evaluator:
         p_val_units = [unit[1] for unit in pred['select'][1]]
         q_val_units = [unit[1] for unit in gold['select'][1]]
         return res_map(p_res, p_val_units) == res_map(q_res, q_val_units)
+    
+
+        
 
     def get_scores(self, count, pred_total, label_total):
         """

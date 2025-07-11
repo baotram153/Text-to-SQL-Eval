@@ -147,7 +147,7 @@ class Rebuilder:
         if order_by is None or len(order_by) == 0:
             return order_by
 
-        direction, val_units, _ = order_by
+        direction, val_units = order_by
         new_val_units = [self.rebuild_val_unit_col(valid_col_units, val_unit, kmap) for val_unit in val_units]
         return direction, new_val_units
 
