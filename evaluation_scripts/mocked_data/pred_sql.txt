@@ -1,6 +1,0 @@
-SELECT
-    p.productvendor,
-    AVG(p.buyprice) AS avg_buy_price
-FROM car_retails.products AS p
-GROUP BY p.productvendor
-ORDER BY AVG(p.buyprice) DESC, p.productvendor ASC;

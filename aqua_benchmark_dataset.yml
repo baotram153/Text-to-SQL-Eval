@@ -1,6 +1,0 @@
-- query: "Count of cars"
-  dataset_uname: "car_retails"
-  sql: "SELECT COUNT(*) FROM products"
-- query: "Count number of orders"
-  dataset_uname: "car_retails"
-  sql: ""

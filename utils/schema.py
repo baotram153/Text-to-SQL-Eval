@@ -6,9 +6,10 @@ class Schema:
     """
     Simple schema which maps each column from each table to a unique identifier
     """
-    def __init__(self, schema):
+    def __init__(self, schema, name):
         self._schema: Dict[str, List[str]] = schema
         self._idMap = self._map(self._schema)
+        self._name = name
 
     @property
     def schema_dict(self):
@@ -69,13 +70,26 @@ def get_schema(db):
 
 
 def get_schema_from_json(fpath):
-    with open(fpath) as f:
-        data = json.load(f)
+    """Return a dict with table name as key and list of column names as value
+    """
+    # with open(fpath) as f:
+    #     data = json.load(f)
 
+    # schema = {}
+    # for entry in data:
+    #     table = str(entry['table'].lower())
+    #     cols = [str(col['column_name'].lower()) for col in entry['col_data']]
+    #     schema[table] = cols
+    with open(fpath, 'r', encoding='utf-8') as f:
+        tables = json.load(f)[0]
+    schema_name = tables['db_id']
     schema = {}
-    for entry in data:
-        table = str(entry['table'].lower())
-        cols = [str(col['column_name'].lower()) for col in entry['col_data']]
-        schema[table] = cols
+    for idx, table in enumerate(tables['table_names']):
+        schema[table.lower()] = []
+        for col in tables['column_names']:
+            if col[0] == idx:
+                schema[table.lower()].append(col[1].lower())
 
-    return schema
+    print(f"Schema loaded from {fpath}: {schema}")
+
+    return schema_name, schema
