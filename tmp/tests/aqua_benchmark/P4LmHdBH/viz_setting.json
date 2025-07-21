@@ -1,0 +1,92 @@
+{
+  "vizSetting": {
+    "viz_type": "data_table",
+    "fields": {
+      "table_fields": [
+        {
+          "path_hash": {
+            "field_name": "total_price"
+          },
+          "custom_label": "Total Price",
+          "type": "number",
+          "aggregation": "custom",
+          "_alias": "total_price",
+          "format": {
+            "type": "number",
+            "format": {
+              "pattern": "#,###0.00"
+            }
+          },
+          "uuid": "f3b3cb5c-4a8d-4946-bb64-ae4a3b047e06"
+        }
+      ]
+    },
+    "settings": {
+      "sort": [],
+      "misc": {
+        "row_limit": -1,
+        "custom_color_list": [
+          {}
+        ],
+        "pagination_size": 25,
+        "show_row_number": true,
+        "column_width": {
+          "type": "auto",
+          "manual_widths": {}
+        }
+      },
+      "conditional_formatting": [],
+      "aggregation": {
+        "show_total": false,
+        "show_average": false
+      },
+      "others": {
+        "include_empty_children_rows": false
+      },
+      "quick_pivot": false,
+      "pop_settings": null
+    },
+    "format": {},
+    "filters": [
+      {
+        "operator": "is",
+        "values": [
+          "Rovelli Gifts"
+        ],
+        "modifier": null,
+        "path_hash": {
+          "model_id": "car_retails_customers",
+          "field_name": "customername",
+          "is_metric": false
+        },
+        "aggregation": null,
+        "label": "Adhoc filter",
+        "dynamic_filter_id": null
+      }
+    ],
+    "amql": {
+      "adhoc_fields": [],
+      "conditions": [
+        {
+          "expr": "car_retails_orders.shippeddate >= @2003-01-01"
+        },
+        {
+          "expr": "car_retails_orders.shippeddate <= @2003-12-31"
+        }
+      ],
+      "filters": []
+    },
+    "adhoc_fields": [
+      {
+        "name": "total_price",
+        "label": "Total Price",
+        "type": "number",
+        "description": "",
+        "sql": "car_retails_orderdetails | sum(car_retails_orderdetails.quantityordered * car_retails_orderdetails.priceeach)",
+        "syntax": "aql",
+        "aggregation_type": "custom",
+        "is_custom": true
+      }
+    ]
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "vizSetting": {
+    "viz_type": "data_table",
+    "fields": {
+      "table_fields": [
+        {
+          "path_hash": {
+            "model_id": "car_retails_employees",
+            "field_name": "firstname"
+          },
+          "type": "text",
+          "transformation": null,
+          "_alias": "sales_rep_first_name",
+          "custom_label": "Sales Rep First Name",
+          "format": {
+            "type": "string",
+            "format": {}
+          },
+          "uuid": "aafa5981-2261-48b5-a36d-42d42d3c3d9a"
+        },
+        {
+          "path_hash": {
+            "model_id": "car_retails_employees",
+            "field_name": "lastname"
+          },
+          "type": "text",
+          "transformation": null,
+          "_alias": "sales_rep_last_name",
+          "custom_label": "Sales Rep Last Name",
+          "format": {
+            "type": "string",
+            "format": {}
+          },
+          "uuid": "960f7d3a-1451-44c9-8e82-e8610f16cc4a"
+        },
+        {
+          "path_hash": {
+            "field_name": "total_payment",
+            "is_metric": false
+          },
+          "_alias": "total_payment",
+          "custom_label": "Total Payment",
+          "type": "number",
+          "aggregation": "custom",
+          "format": {
+            "type": "number",
+            "format": {
+              "pattern": "#,###0.00"
+            }
+          },
+          "uuid": "234ed201-1a9d-4401-aa65-e66188991140"
+        }
+      ]
+    },
+    "settings": {
+      "sort": [],
+      "misc": {
+        "row_limit": -1,
+        "custom_color_list": [
+          {}
+        ],
+        "pagination_size": 25,
+        "show_row_number": true,
+        "column_width": {
+          "type": "auto",
+          "manual_widths": {}
+        }
+      },
+      "conditional_formatting": [],
+      "aggregation": {
+        "show_total": false,
+        "show_average": false
+      },
+      "others": {
+        "include_empty_children_rows": false
+      },
+      "quick_pivot": false,
+      "pop_settings": null
+    },
+    "format": {},
+    "filters": [
+      {
+        "operator": "matches",
+        "values": [
+          "2004"
+        ],
+        "modifier": null,
+        "path_hash": {
+          "model_id": "car_retails_payments",
+          "field_name": "paymentdate",
+          "is_metric": false
+        },
+        "aggregation": null,
+        "label": "Adhoc filter",
+        "dynamic_filter_id": null
+      }
+    ],
+    "amql": {
+      "adhoc_fields": [],
+      "conditions": [],
+      "filters": []
+    },
+    "adhoc_fields": [
+      {
+        "name": "total_payment",
+        "label": "Total Payment",
+        "type": "number",
+        "description": "",
+        "sql": "car_retails_payments | sum(car_retails_payments.amount)",
+        "syntax": "aql",
+        "aggregation_type": "custom",
+        "is_custom": true
+      }
+    ]
+  }
+}

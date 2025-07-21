@@ -1,0 +1,1 @@
+List the country and how many customers are there.

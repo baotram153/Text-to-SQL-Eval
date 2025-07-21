@@ -1,0 +1,1 @@
+Which different vendor has the most amount of orders? Calculate the total estimated earnings.

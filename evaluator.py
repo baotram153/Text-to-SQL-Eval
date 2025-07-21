@@ -113,7 +113,7 @@ class Evaluator:
         def norm(val: Any) -> Any:                       # cell normaliser
             if val is None or (isinstance(val, str) and val.strip().upper() == "NULL"):
                 return None
-            if isinstance(val, (int, float)):            # numeric → rounded
+            if isinstance(val, (int, float)):            # numeric -> rounded
                 return round(float(val), 6) if isinstance(val, float) else val
             if isinstance(val, str):
                 # numeric disguised as str?
@@ -143,7 +143,6 @@ class Evaluator:
     def eval_exec_match(self, pred_table_file, label_table_file):
         pred_table = json.load(open(pred_table_file, 'r'))
         label_table = json.load(open(label_table_file, 'r'))
-        
         normalized_pred = self.normalize_table(pred_table)
         print(f"Pred table: {normalized_pred}")
         print(f"Label table: {label_table}")

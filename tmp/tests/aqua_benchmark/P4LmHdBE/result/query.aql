@@ -1,0 +1,8 @@
+explore {
+  dimensions {
+    crc_c_6538d5: car_retails_customers.country
+  }
+  measures {
+    customer_count: car_retails_customers | count(car_retails_customers.customernumber)
+  }
+}

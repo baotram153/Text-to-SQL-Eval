@@ -1,0 +1,163 @@
+{
+  "vizSetting": {
+    "viz_type": "data_table",
+    "fields": {
+      "table_fields": [
+        {
+          "path_hash": {
+            "model_id": "car_retails_products",
+            "field_name": "productvendor"
+          },
+          "type": "text",
+          "transformation": null,
+          "_alias": "vendor_name",
+          "custom_label": "Vendor Name",
+          "format": {
+            "type": "string",
+            "format": {}
+          },
+          "uuid": "1508835f-c494-4e33-9924-37c6ab0cd04e"
+        },
+        {
+          "path_hash": {
+            "field_name": "order_count",
+            "is_metric": false
+          },
+          "_alias": "order_count",
+          "custom_label": "Order Count",
+          "type": "number",
+          "aggregation": "custom",
+          "format": {
+            "type": "number",
+            "format": {
+              "pattern": "#,###"
+            }
+          },
+          "uuid": "bf461136-7917-49cb-ab6b-563739433803"
+        },
+        {
+          "path_hash": {
+            "field_name": "total_earnings",
+            "is_metric": false
+          },
+          "_alias": "total_estimated_earnings",
+          "custom_label": "Total Estimated Earnings",
+          "type": "number",
+          "aggregation": "custom",
+          "format": {
+            "type": "number",
+            "format": {
+              "pattern": "#,###0.00"
+            }
+          },
+          "uuid": "84e94c0e-b796-4b52-93b0-a2172a803847"
+        },
+        {
+          "path_hash": {
+            "field_name": "vendor_rank_by_orders",
+            "is_metric": false
+          },
+          "_alias": "vendor_rank_by_orders",
+          "custom_label": "Vendor Rank By Orders",
+          "type": "number",
+          "aggregation": "custom",
+          "format": {
+            "type": "number",
+            "format": {
+              "pattern": "#,###"
+            }
+          },
+          "uuid": "bf86a895-b6d8-4b51-901c-d0b244087e89"
+        }
+      ]
+    },
+    "settings": {
+      "sort": [
+        {
+          "column": 1,
+          "sortOrder": false
+        },
+        {
+          "column": 0,
+          "sortOrder": true
+        }
+      ],
+      "misc": {
+        "row_limit": -1,
+        "custom_color_list": [
+          {}
+        ],
+        "pagination_size": 25,
+        "show_row_number": true,
+        "column_width": {
+          "type": "auto",
+          "manual_widths": {}
+        }
+      },
+      "conditional_formatting": [],
+      "aggregation": {
+        "show_total": false,
+        "show_average": false
+      },
+      "others": {
+        "include_empty_children_rows": false
+      },
+      "quick_pivot": false,
+      "pop_settings": null
+    },
+    "format": {},
+    "filters": [
+      {
+        "operator": "is",
+        "values": [
+          "1"
+        ],
+        "modifier": null,
+        "path_hash": {
+          "field_name": "vendor_rank_by_orders",
+          "is_metric": false
+        },
+        "aggregation": null,
+        "label": "Adhoc filter",
+        "dynamic_filter_id": null
+      }
+    ],
+    "amql": {
+      "adhoc_fields": [],
+      "conditions": [],
+      "filters": []
+    },
+    "adhoc_fields": [
+      {
+        "name": "order_count",
+        "label": "Order Count",
+        "type": "number",
+        "description": "",
+        "sql": "car_retails_orderdetails | count(car_retails_orderdetails.ordernumber)",
+        "syntax": "aql",
+        "aggregation_type": "custom",
+        "is_custom": true
+      },
+      {
+        "name": "total_earnings",
+        "label": "Total Earnings",
+        "type": "number",
+        "description": "",
+        "sql": "car_retails_orderdetails | sum(car_retails_orderdetails.quantityordered * car_retails_orderdetails.priceeach)",
+        "syntax": "aql",
+        "aggregation_type": "custom",
+        "is_custom": true
+      },
+      {
+        "name": "vendor_rank_by_orders",
+        "label": "Vendor Rank By Orders",
+        "type": "number",
+        "description": "",
+        "sql": "rank(order: order_count | desc())",
+        "syntax": "aql",
+        "aggregation_type": "custom",
+        "is_custom": true
+      }
+    ]
+  }
+}

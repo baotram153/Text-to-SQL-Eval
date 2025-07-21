@@ -1,0 +1,13 @@
+explore {
+  dimensions {
+    crp_p_0aa5b5: car_retails_products.productvendor
+  }
+  measures {
+    order_count: car_retails_orderdetails | count(car_retails_orderdetails.ordernumber),
+    total_earnings: car_retails_orderdetails | sum(car_retails_orderdetails.quantityordered * car_retails_orderdetails.priceeach),
+    vendor_rank_by_orders: rank(order: order_count | desc())
+  }
+  filters {
+    vendor_rank_by_orders is 1.0
+  }
+}
