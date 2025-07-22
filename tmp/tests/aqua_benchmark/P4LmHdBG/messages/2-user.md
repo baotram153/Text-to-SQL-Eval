@@ -1,0 +1,1 @@
+Which sales representatives generated the highest payment revenue in 2004?

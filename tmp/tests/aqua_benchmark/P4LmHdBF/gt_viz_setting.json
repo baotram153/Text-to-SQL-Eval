@@ -1,0 +1,146 @@
+{
+  "vizSetting": {
+    "viz_type": "data_table",
+    "fields": {
+      "table_fields": [
+        {
+          "path_hash": {
+            "model_id": "car_retails_products",
+            "field_name": "productvendor"
+          },
+          "type": "text",
+          "transformation": null,
+          "_alias": "productvendor",
+          "custom_label": "Productvendor",
+          "format": {
+            "type": "string",
+            "format": {}
+          },
+          "uuid": "4a6a9657-3d79-4651-a6a2-072e8ba98960"
+        },
+        {
+          "path_hash": {
+            "model_id": "car_retails_products",
+            "field_name": "msrp"
+          },
+          "type": "number",
+          "transformation": null,
+          "_alias": "msrp",
+          "custom_label": "Msrp",
+          "format": {
+            "type": "number",
+            "format": {
+              "pattern": "#,###0.00"
+            }
+          },
+          "uuid": "0b052df8-45ee-4eda-b2a2-67ecfce345bc"
+        },
+        {
+          "path_hash": {
+            "model_id": "car_retails_products",
+            "field_name": "buyprice"
+          },
+          "type": "number",
+          "transformation": null,
+          "_alias": "buyprice",
+          "custom_label": "Buyprice",
+          "format": {
+            "type": "number",
+            "format": {
+              "pattern": "#,###0.00"
+            }
+          },
+          "uuid": "e2dc7b0e-d49f-452f-ab3c-054ded396f86"
+        },
+        {
+          "path_hash": {
+            "field_name": "profit_margin",
+            "is_metric": false
+          },
+          "_alias": "profit_margin",
+          "custom_label": "Profit Margin",
+          "type": "number",
+          "aggregation": "custom",
+          "format": {
+            "type": "number",
+            "format": {
+              "pattern": "#,###0.00"
+            }
+          },
+          "uuid": "e408d642-a7d7-4138-b758-7409cff7de8c"
+        },
+        {
+          "path_hash": {
+            "field_name": "total_quantity_ordered",
+            "is_metric": false
+          },
+          "_alias": "total_quantity_ordered",
+          "custom_label": "Total Quantity Ordered",
+          "type": "number",
+          "aggregation": "custom",
+          "format": {
+            "type": "number",
+            "format": {
+              "pattern": "#,###0.00"
+            }
+          },
+          "uuid": "ddb10b72-790d-4be7-86b9-08d3e756ca53"
+        }
+      ]
+    },
+    "settings": {
+      "sort": [],
+      "misc": {
+        "row_limit": -1,
+        "custom_color_list": [
+          {}
+        ],
+        "pagination_size": 25,
+        "show_row_number": true,
+        "column_width": {
+          "type": "auto",
+          "manual_widths": {}
+        }
+      },
+      "conditional_formatting": [],
+      "aggregation": {
+        "show_total": false,
+        "show_average": false
+      },
+      "others": {
+        "include_empty_children_rows": false
+      },
+      "quick_pivot": false,
+      "pop_settings": null
+    },
+    "format": {},
+    "filters": [],
+    "amql": {
+      "adhoc_fields": [],
+      "conditions": [],
+      "filters": []
+    },
+    "adhoc_fields": [
+      {
+        "name": "profit_margin",
+        "label": "Profit Margin",
+        "type": "number",
+        "description": "",
+        "sql": "car_retails_products.msrp - car_retails_products.buyprice",
+        "syntax": "aql",
+        "aggregation_type": "custom",
+        "is_custom": true
+      },
+      {
+        "name": "total_quantity_ordered",
+        "label": "Total Quantity Ordered",
+        "type": "number",
+        "description": "",
+        "sql": "car_retails_orderdetails.quantityordered | sum()",
+        "syntax": "aql",
+        "aggregation_type": "custom",
+        "is_custom": true
+      }
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+explore {
+  dimensions {
+    cre_e_0b2f9b: car_retails_employees.employeenumber,
+    cre_f_76292b: car_retails_employees.firstname,
+    cre_l_eebe4a: car_retails_employees.lastname
+  }
+  measures {
+    total_payment_revenue: car_retails_payments | sum(car_retails_payments.amount)
+  }
+  filters {
+    car_retails_payments.paymentdate matches @(2004)
+  }
+}

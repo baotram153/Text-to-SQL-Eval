@@ -1,0 +1,27 @@
+Dataset car_retails {
+  label: 'Car Retails'
+  description: ''
+  data_source_name: 'aqua_test'
+  models: [
+    car_retails_customers,
+    car_retails_employees,
+    car_retails_offices,
+    car_retails_orderdetails,
+    car_retails_orders,
+    car_retails_payments,
+    car_retails_productlines,
+    car_retails_products,
+  ]
+
+  relationships: [
+    relationship(car_retails_products.productline > car_retails_productlines.productline, true),
+    relationship(car_retails_orderdetails.productcode > car_retails_products.productcode, true),
+    relationship(car_retails_orderdetails.ordernumber > car_retails_orders.ordernumber, true),
+    relationship(car_retails_payments.customernumber > car_retails_customers.customernumber, true),
+    relationship(car_retails_orders.customernumber > car_retails_customers.customernumber, true),
+    relationship(car_retails_customers.salesrepemployeenumber > car_retails_employees.employeenumber, true),
+    relationship(car_retails_employees.officecode > car_retails_offices.officecode, true),
+    relationship(car_retails_employees.reportsto > car_retails_employees.employeenumber, false),
+  ]
+  owner: 'scott.bui@holistics.io'
+}

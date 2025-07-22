@@ -1,0 +1,89 @@
+{
+  "vizSetting": {
+    "viz_type": "data_table",
+    "fields": {
+      "table_fields": [
+        {
+          "path_hash": {
+            "model_id": "car_retails_customers",
+            "field_name": "country"
+          },
+          "type": "text",
+          "transformation": null,
+          "_alias": "country",
+          "custom_label": "Country",
+          "format": {
+            "type": "string",
+            "format": {}
+          },
+          "uuid": "d111569f-f99e-43af-9a6b-556f839c7240"
+        },
+        {
+          "path_hash": {
+            "field_name": "customer_count"
+          },
+          "custom_label": "Customer Count",
+          "type": "number",
+          "aggregation": "custom",
+          "_alias": "customer_count",
+          "format": {
+            "type": "number",
+            "format": {
+              "pattern": "#,###"
+            }
+          },
+          "uuid": "df76c265-94c5-4a61-88a4-5746aa308b4d"
+        }
+      ]
+    },
+    "settings": {
+      "sort": [
+        {
+          "column": 0,
+          "sortOrder": true
+        }
+      ],
+      "misc": {
+        "row_limit": -1,
+        "custom_color_list": [
+          {}
+        ],
+        "pagination_size": 25,
+        "show_row_number": true,
+        "column_width": {
+          "type": "auto",
+          "manual_widths": {}
+        }
+      },
+      "conditional_formatting": [],
+      "aggregation": {
+        "show_total": false,
+        "show_average": false
+      },
+      "others": {
+        "include_empty_children_rows": false
+      },
+      "quick_pivot": false,
+      "pop_settings": null
+    },
+    "format": {},
+    "filters": [],
+    "amql": {
+      "adhoc_fields": [],
+      "conditions": [],
+      "filters": []
+    },
+    "adhoc_fields": [
+      {
+        "name": "customer_count",
+        "label": "Customer Count",
+        "type": "number",
+        "description": "",
+        "sql": "car_retails_customers | count(car_retails_customers.customernumber)",
+        "syntax": "aql",
+        "aggregation_type": "custom",
+        "is_custom": true
+      }
+    ]
+  }
+}

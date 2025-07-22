@@ -1,0 +1,3972 @@
+{
+  "aql": "AQL\n```aql\nmetric customer_count = car_retails_customers | count(car_retails_customers.customernumber);\nexplore {\n  dimensions {\n    country: car_retails_customers.country\n  }\n  measures {\n    customer_count: customer_count\n  }\n}\n\n```\n",
+  "dataset": {
+    "name": "car_retails",
+    "label": "Car Retails",
+    "description": "",
+    "__engine__": null,
+    "tags": [
+
+    ],
+    "slug": null,
+    "views": [
+
+    ],
+    "version": "290cf56ec087d3686a132b7e9eeafbb6f646ef30",
+    "version_timestamp": "2025-07-18T10:31:04Z",
+    "is_frontend_cached": false,
+    "category_id": null,
+    "tenant_id": 1,
+    "owner_id": null,
+    "data_source_id": 5,
+    "data_source": {
+      "id": 5,
+      "name": "aqua_test",
+      "dbtype": "postgresql"
+    },
+    "data_models": [
+      {
+        "name": "car_retails_customers",
+        "label": "Customers",
+        "description": "",
+        "tags": [
+
+        ],
+        "id": "car_retails_customers",
+        "is_base": null,
+        "category_id": null,
+        "backend_id": null,
+        "backend_type": null,
+        "data_source_id": 5,
+        "fields": [
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Addressline1",
+            "name": "addressline1",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.addressline1 }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_customers",
+              "name": "car_retails_customers"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Addressline2",
+            "name": "addressline2",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.addressline2 }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_customers",
+              "name": "car_retails_customers"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "City",
+            "name": "city",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.city }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_customers",
+              "name": "car_retails_customers"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Contactfirstname",
+            "name": "contactfirstname",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.contactfirstname }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_customers",
+              "name": "car_retails_customers"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Contactlastname",
+            "name": "contactlastname",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.contactlastname }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_customers",
+              "name": "car_retails_customers"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Country",
+            "name": "country",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.country }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_customers",
+              "name": "car_retails_customers"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Creditlimit",
+            "name": "creditlimit",
+            "type": "number",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.creditlimit }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_customers",
+              "name": "car_retails_customers"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Customername",
+            "name": "customername",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.customername }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_customers",
+              "name": "car_retails_customers"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Customernumber",
+            "name": "customernumber",
+            "type": "number",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.customernumber }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_customers",
+              "name": "car_retails_customers"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Phone",
+            "name": "phone",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.phone }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_customers",
+              "name": "car_retails_customers"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Postalcode",
+            "name": "postalcode",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.postalcode }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_customers",
+              "name": "car_retails_customers"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Salesrepemployeenumber",
+            "name": "salesrepemployeenumber",
+            "type": "number",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.salesrepemployeenumber }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_customers",
+              "name": "car_retails_customers"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "State",
+            "name": "state",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.state }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_customers",
+              "name": "car_retails_customers"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          }
+        ],
+        "sql": null,
+        "table_name": "\"car_retails\".\"customers\"",
+        "metadata": {
+        },
+        "dimensions": [
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Customername",
+            "name": "customername",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.customername }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_customers",
+              "name": "car_retails_customers"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Contactlastname",
+            "name": "contactlastname",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.contactlastname }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_customers",
+              "name": "car_retails_customers"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Contactfirstname",
+            "name": "contactfirstname",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.contactfirstname }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_customers",
+              "name": "car_retails_customers"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Phone",
+            "name": "phone",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.phone }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_customers",
+              "name": "car_retails_customers"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Addressline1",
+            "name": "addressline1",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.addressline1 }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_customers",
+              "name": "car_retails_customers"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Addressline2",
+            "name": "addressline2",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.addressline2 }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_customers",
+              "name": "car_retails_customers"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "City",
+            "name": "city",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.city }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_customers",
+              "name": "car_retails_customers"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "State",
+            "name": "state",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.state }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_customers",
+              "name": "car_retails_customers"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Postalcode",
+            "name": "postalcode",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.postalcode }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_customers",
+              "name": "car_retails_customers"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Country",
+            "name": "country",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.country }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_customers",
+              "name": "car_retails_customers"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Salesrepemployeenumber",
+            "name": "salesrepemployeenumber",
+            "type": "number",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.salesrepemployeenumber }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_customers",
+              "name": "car_retails_customers"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Creditlimit",
+            "name": "creditlimit",
+            "type": "number",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.creditlimit }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_customers",
+              "name": "car_retails_customers"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Customernumber",
+            "name": "customernumber",
+            "type": "number",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.customernumber }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_customers",
+              "name": "car_retails_customers"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          }
+        ],
+        "owner": null,
+        "source_type": null,
+        "measures": [
+
+        ],
+        "params": [
+
+        ]
+      },
+      {
+        "name": "car_retails_employees",
+        "label": "Employees",
+        "description": "",
+        "tags": [
+
+        ],
+        "id": "car_retails_employees",
+        "is_base": null,
+        "category_id": null,
+        "backend_id": null,
+        "backend_type": null,
+        "data_source_id": 5,
+        "fields": [
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Email",
+            "name": "email",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.email }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_employees",
+              "name": "car_retails_employees"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Employeenumber",
+            "name": "employeenumber",
+            "type": "number",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.employeenumber }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_employees",
+              "name": "car_retails_employees"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Extension",
+            "name": "extension",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.extension }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_employees",
+              "name": "car_retails_employees"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Firstname",
+            "name": "firstname",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.firstname }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_employees",
+              "name": "car_retails_employees"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Jobtitle",
+            "name": "jobtitle",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.jobtitle }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_employees",
+              "name": "car_retails_employees"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Lastname",
+            "name": "lastname",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.lastname }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_employees",
+              "name": "car_retails_employees"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Officecode",
+            "name": "officecode",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.officecode }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_employees",
+              "name": "car_retails_employees"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Reportsto",
+            "name": "reportsto",
+            "type": "number",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.reportsto }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_employees",
+              "name": "car_retails_employees"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          }
+        ],
+        "sql": null,
+        "table_name": "\"car_retails\".\"employees\"",
+        "metadata": {
+        },
+        "dimensions": [
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Lastname",
+            "name": "lastname",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.lastname }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_employees",
+              "name": "car_retails_employees"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Firstname",
+            "name": "firstname",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.firstname }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_employees",
+              "name": "car_retails_employees"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Extension",
+            "name": "extension",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.extension }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_employees",
+              "name": "car_retails_employees"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Email",
+            "name": "email",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.email }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_employees",
+              "name": "car_retails_employees"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Officecode",
+            "name": "officecode",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.officecode }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_employees",
+              "name": "car_retails_employees"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Reportsto",
+            "name": "reportsto",
+            "type": "number",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.reportsto }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_employees",
+              "name": "car_retails_employees"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Jobtitle",
+            "name": "jobtitle",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.jobtitle }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_employees",
+              "name": "car_retails_employees"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Employeenumber",
+            "name": "employeenumber",
+            "type": "number",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.employeenumber }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_employees",
+              "name": "car_retails_employees"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          }
+        ],
+        "owner": null,
+        "source_type": null,
+        "measures": [
+
+        ],
+        "params": [
+
+        ]
+      },
+      {
+        "name": "car_retails_offices",
+        "label": "Offices",
+        "description": "",
+        "tags": [
+
+        ],
+        "id": "car_retails_offices",
+        "is_base": null,
+        "category_id": null,
+        "backend_id": null,
+        "backend_type": null,
+        "data_source_id": 5,
+        "fields": [
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Addressline1",
+            "name": "addressline1",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.addressline1 }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_offices",
+              "name": "car_retails_offices"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Addressline2",
+            "name": "addressline2",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.addressline2 }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_offices",
+              "name": "car_retails_offices"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "City",
+            "name": "city",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.city }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_offices",
+              "name": "car_retails_offices"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Country",
+            "name": "country",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.country }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_offices",
+              "name": "car_retails_offices"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Officecode",
+            "name": "officecode",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.officecode }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_offices",
+              "name": "car_retails_offices"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Phone",
+            "name": "phone",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.phone }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_offices",
+              "name": "car_retails_offices"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Postalcode",
+            "name": "postalcode",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.postalcode }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_offices",
+              "name": "car_retails_offices"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "State",
+            "name": "state",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.state }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_offices",
+              "name": "car_retails_offices"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Territory",
+            "name": "territory",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.territory }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_offices",
+              "name": "car_retails_offices"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          }
+        ],
+        "sql": null,
+        "table_name": "\"car_retails\".\"offices\"",
+        "metadata": {
+        },
+        "dimensions": [
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Officecode",
+            "name": "officecode",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.officecode }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_offices",
+              "name": "car_retails_offices"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "City",
+            "name": "city",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.city }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_offices",
+              "name": "car_retails_offices"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Phone",
+            "name": "phone",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.phone }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_offices",
+              "name": "car_retails_offices"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Addressline1",
+            "name": "addressline1",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.addressline1 }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_offices",
+              "name": "car_retails_offices"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Addressline2",
+            "name": "addressline2",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.addressline2 }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_offices",
+              "name": "car_retails_offices"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "State",
+            "name": "state",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.state }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_offices",
+              "name": "car_retails_offices"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Country",
+            "name": "country",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.country }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_offices",
+              "name": "car_retails_offices"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Postalcode",
+            "name": "postalcode",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.postalcode }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_offices",
+              "name": "car_retails_offices"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Territory",
+            "name": "territory",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.territory }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_offices",
+              "name": "car_retails_offices"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          }
+        ],
+        "owner": null,
+        "source_type": null,
+        "measures": [
+
+        ],
+        "params": [
+
+        ]
+      },
+      {
+        "name": "car_retails_orderdetails",
+        "label": "Orderdetails",
+        "description": "",
+        "tags": [
+
+        ],
+        "id": "car_retails_orderdetails",
+        "is_base": null,
+        "category_id": null,
+        "backend_id": null,
+        "backend_type": null,
+        "data_source_id": 5,
+        "fields": [
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Orderlinenumber",
+            "name": "orderlinenumber",
+            "type": "number",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.orderlinenumber }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_orderdetails",
+              "name": "car_retails_orderdetails"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Ordernumber",
+            "name": "ordernumber",
+            "type": "number",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.ordernumber }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_orderdetails",
+              "name": "car_retails_orderdetails"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Priceeach",
+            "name": "priceeach",
+            "type": "number",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.priceeach }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_orderdetails",
+              "name": "car_retails_orderdetails"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Productcode",
+            "name": "productcode",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.productcode }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_orderdetails",
+              "name": "car_retails_orderdetails"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Quantityordered",
+            "name": "quantityordered",
+            "type": "number",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.quantityordered }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_orderdetails",
+              "name": "car_retails_orderdetails"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          }
+        ],
+        "sql": null,
+        "table_name": "\"car_retails\".\"orderdetails\"",
+        "metadata": {
+        },
+        "dimensions": [
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Ordernumber",
+            "name": "ordernumber",
+            "type": "number",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.ordernumber }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_orderdetails",
+              "name": "car_retails_orderdetails"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Productcode",
+            "name": "productcode",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.productcode }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_orderdetails",
+              "name": "car_retails_orderdetails"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Quantityordered",
+            "name": "quantityordered",
+            "type": "number",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.quantityordered }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_orderdetails",
+              "name": "car_retails_orderdetails"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Priceeach",
+            "name": "priceeach",
+            "type": "number",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.priceeach }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_orderdetails",
+              "name": "car_retails_orderdetails"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Orderlinenumber",
+            "name": "orderlinenumber",
+            "type": "number",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.orderlinenumber }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_orderdetails",
+              "name": "car_retails_orderdetails"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          }
+        ],
+        "owner": null,
+        "source_type": null,
+        "measures": [
+
+        ],
+        "params": [
+
+        ]
+      },
+      {
+        "name": "car_retails_orders",
+        "label": "Orders",
+        "description": "",
+        "tags": [
+
+        ],
+        "id": "car_retails_orders",
+        "is_base": null,
+        "category_id": null,
+        "backend_id": null,
+        "backend_type": null,
+        "data_source_id": 5,
+        "fields": [
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Comments",
+            "name": "comments",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.comments }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_orders",
+              "name": "car_retails_orders"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Customernumber",
+            "name": "customernumber",
+            "type": "number",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.customernumber }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_orders",
+              "name": "car_retails_orders"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Orderdate",
+            "name": "orderdate",
+            "type": "date",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.orderdate }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_orders",
+              "name": "car_retails_orders"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Ordernumber",
+            "name": "ordernumber",
+            "type": "number",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.ordernumber }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_orders",
+              "name": "car_retails_orders"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Requireddate",
+            "name": "requireddate",
+            "type": "date",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.requireddate }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_orders",
+              "name": "car_retails_orders"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Shippeddate",
+            "name": "shippeddate",
+            "type": "date",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.shippeddate }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_orders",
+              "name": "car_retails_orders"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Status",
+            "name": "status",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.status }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_orders",
+              "name": "car_retails_orders"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          }
+        ],
+        "sql": null,
+        "table_name": "\"car_retails\".\"orders\"",
+        "metadata": {
+        },
+        "dimensions": [
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Orderdate",
+            "name": "orderdate",
+            "type": "date",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.orderdate }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_orders",
+              "name": "car_retails_orders"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Requireddate",
+            "name": "requireddate",
+            "type": "date",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.requireddate }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_orders",
+              "name": "car_retails_orders"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Shippeddate",
+            "name": "shippeddate",
+            "type": "date",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.shippeddate }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_orders",
+              "name": "car_retails_orders"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Status",
+            "name": "status",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.status }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_orders",
+              "name": "car_retails_orders"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Comments",
+            "name": "comments",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.comments }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_orders",
+              "name": "car_retails_orders"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Customernumber",
+            "name": "customernumber",
+            "type": "number",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.customernumber }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_orders",
+              "name": "car_retails_orders"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Ordernumber",
+            "name": "ordernumber",
+            "type": "number",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.ordernumber }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_orders",
+              "name": "car_retails_orders"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          }
+        ],
+        "owner": null,
+        "source_type": null,
+        "measures": [
+
+        ],
+        "params": [
+
+        ]
+      },
+      {
+        "name": "car_retails_payments",
+        "label": "Payments",
+        "description": "",
+        "tags": [
+
+        ],
+        "id": "car_retails_payments",
+        "is_base": null,
+        "category_id": null,
+        "backend_id": null,
+        "backend_type": null,
+        "data_source_id": 5,
+        "fields": [
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Amount",
+            "name": "amount",
+            "type": "number",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.amount }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_payments",
+              "name": "car_retails_payments"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Checknumber",
+            "name": "checknumber",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.checknumber }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_payments",
+              "name": "car_retails_payments"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Customernumber",
+            "name": "customernumber",
+            "type": "number",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.customernumber }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_payments",
+              "name": "car_retails_payments"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Paymentdate",
+            "name": "paymentdate",
+            "type": "date",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.paymentdate }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_payments",
+              "name": "car_retails_payments"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          }
+        ],
+        "sql": null,
+        "table_name": "\"car_retails\".\"payments\"",
+        "metadata": {
+        },
+        "dimensions": [
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Customernumber",
+            "name": "customernumber",
+            "type": "number",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.customernumber }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_payments",
+              "name": "car_retails_payments"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Checknumber",
+            "name": "checknumber",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.checknumber }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_payments",
+              "name": "car_retails_payments"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Paymentdate",
+            "name": "paymentdate",
+            "type": "date",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.paymentdate }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_payments",
+              "name": "car_retails_payments"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Amount",
+            "name": "amount",
+            "type": "number",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.amount }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_payments",
+              "name": "car_retails_payments"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          }
+        ],
+        "owner": null,
+        "source_type": null,
+        "measures": [
+
+        ],
+        "params": [
+
+        ]
+      },
+      {
+        "name": "car_retails_productlines",
+        "label": "Productlines",
+        "description": "",
+        "tags": [
+
+        ],
+        "id": "car_retails_productlines",
+        "is_base": null,
+        "category_id": null,
+        "backend_id": null,
+        "backend_type": null,
+        "data_source_id": 5,
+        "fields": [
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Htmldescription",
+            "name": "htmldescription",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.htmldescription }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_productlines",
+              "name": "car_retails_productlines"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Image",
+            "name": "image",
+            "type": "unknown",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.image }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_productlines",
+              "name": "car_retails_productlines"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Productline",
+            "name": "productline",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.productline }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_productlines",
+              "name": "car_retails_productlines"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Textdescription",
+            "name": "textdescription",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.textdescription }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_productlines",
+              "name": "car_retails_productlines"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          }
+        ],
+        "sql": null,
+        "table_name": "\"car_retails\".\"productlines\"",
+        "metadata": {
+        },
+        "dimensions": [
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Productline",
+            "name": "productline",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.productline }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_productlines",
+              "name": "car_retails_productlines"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Textdescription",
+            "name": "textdescription",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.textdescription }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_productlines",
+              "name": "car_retails_productlines"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Htmldescription",
+            "name": "htmldescription",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.htmldescription }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_productlines",
+              "name": "car_retails_productlines"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Image",
+            "name": "image",
+            "type": "unknown",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.image }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_productlines",
+              "name": "car_retails_productlines"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          }
+        ],
+        "owner": null,
+        "source_type": null,
+        "measures": [
+
+        ],
+        "params": [
+
+        ]
+      },
+      {
+        "name": "car_retails_products",
+        "label": "Products",
+        "description": "",
+        "tags": [
+
+        ],
+        "id": "car_retails_products",
+        "is_base": null,
+        "category_id": null,
+        "backend_id": null,
+        "backend_type": null,
+        "data_source_id": 5,
+        "fields": [
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Buyprice",
+            "name": "buyprice",
+            "type": "number",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.buyprice }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_products",
+              "name": "car_retails_products"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Msrp",
+            "name": "msrp",
+            "type": "number",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.msrp }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_products",
+              "name": "car_retails_products"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Productcode",
+            "name": "productcode",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.productcode }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_products",
+              "name": "car_retails_products"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Productdescription",
+            "name": "productdescription",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.productdescription }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_products",
+              "name": "car_retails_products"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Productline",
+            "name": "productline",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.productline }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_products",
+              "name": "car_retails_products"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Productname",
+            "name": "productname",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.productname }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_products",
+              "name": "car_retails_products"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Productscale",
+            "name": "productscale",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.productscale }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_products",
+              "name": "car_retails_products"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Productvendor",
+            "name": "productvendor",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.productvendor }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_products",
+              "name": "car_retails_products"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Quantityinstock",
+            "name": "quantityinstock",
+            "type": "number",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.quantityinstock }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_products",
+              "name": "car_retails_products"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          }
+        ],
+        "sql": null,
+        "table_name": "\"car_retails\".\"products\"",
+        "metadata": {
+        },
+        "dimensions": [
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Productcode",
+            "name": "productcode",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.productcode }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_products",
+              "name": "car_retails_products"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Productname",
+            "name": "productname",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.productname }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_products",
+              "name": "car_retails_products"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Productline",
+            "name": "productline",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.productline }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_products",
+              "name": "car_retails_products"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Productscale",
+            "name": "productscale",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.productscale }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_products",
+              "name": "car_retails_products"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Productvendor",
+            "name": "productvendor",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.productvendor }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_products",
+              "name": "car_retails_products"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Productdescription",
+            "name": "productdescription",
+            "type": "text",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.productdescription }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_products",
+              "name": "car_retails_products"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Quantityinstock",
+            "name": "quantityinstock",
+            "type": "number",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.quantityinstock }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_products",
+              "name": "car_retails_products"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Buyprice",
+            "name": "buyprice",
+            "type": "number",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.buyprice }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_products",
+              "name": "car_retails_products"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          },
+          {
+            "custom_label": null,
+            "transform_type": null,
+            "description": "",
+            "aggregation_type": null,
+            "label": "Msrp",
+            "name": "msrp",
+            "type": "number",
+            "syntax": "sql",
+            "sql": "{{ #SOURCE.msrp }}",
+            "is_hidden": false,
+            "tags": [
+
+            ],
+            "defined_in_dataset": false,
+            "model": {
+              "id": "car_retails_products",
+              "name": "car_retails_products"
+            },
+            "joins_path": null,
+            "is_external": null,
+            "dbtype": null,
+            "is_custom_measure": null,
+            "is_custom": null,
+            "field_format": null,
+            "allowed_values": [
+
+            ]
+          }
+        ],
+        "owner": null,
+        "source_type": null,
+        "measures": [
+
+        ],
+        "params": [
+
+        ]
+      }
+    ],
+    "metrics": [
+
+    ],
+    "join_configs": [
+      {
+        "active": true,
+        "id": null,
+        "data_set_id": null,
+        "join_id": null,
+        "join": {
+          "name": null,
+          "source_model": "car_retails_products",
+          "dest_model": "car_retails_productlines",
+          "link_type": "many_to_one",
+          "join_on": "${SOURCE.productline} = ${DEST.productline}"
+        },
+        "direction": "two_way"
+      },
+      {
+        "active": true,
+        "id": null,
+        "data_set_id": null,
+        "join_id": null,
+        "join": {
+          "name": null,
+          "source_model": "car_retails_orderdetails",
+          "dest_model": "car_retails_products",
+          "link_type": "many_to_one",
+          "join_on": "${SOURCE.productcode} = ${DEST.productcode}"
+        },
+        "direction": "two_way"
+      },
+      {
+        "active": true,
+        "id": null,
+        "data_set_id": null,
+        "join_id": null,
+        "join": {
+          "name": null,
+          "source_model": "car_retails_orderdetails",
+          "dest_model": "car_retails_orders",
+          "link_type": "many_to_one",
+          "join_on": "${SOURCE.ordernumber} = ${DEST.ordernumber}"
+        },
+        "direction": "two_way"
+      },
+      {
+        "active": true,
+        "id": null,
+        "data_set_id": null,
+        "join_id": null,
+        "join": {
+          "name": null,
+          "source_model": "car_retails_payments",
+          "dest_model": "car_retails_customers",
+          "link_type": "many_to_one",
+          "join_on": "${SOURCE.customernumber} = ${DEST.customernumber}"
+        },
+        "direction": "two_way"
+      },
+      {
+        "active": true,
+        "id": null,
+        "data_set_id": null,
+        "join_id": null,
+        "join": {
+          "name": null,
+          "source_model": "car_retails_orders",
+          "dest_model": "car_retails_customers",
+          "link_type": "many_to_one",
+          "join_on": "${SOURCE.customernumber} = ${DEST.customernumber}"
+        },
+        "direction": "two_way"
+      },
+      {
+        "active": true,
+        "id": null,
+        "data_set_id": null,
+        "join_id": null,
+        "join": {
+          "name": null,
+          "source_model": "car_retails_customers",
+          "dest_model": "car_retails_employees",
+          "link_type": "many_to_one",
+          "join_on": "${SOURCE.salesrepemployeenumber} = ${DEST.employeenumber}"
+        },
+        "direction": "two_way"
+      },
+      {
+        "active": true,
+        "id": null,
+        "data_set_id": null,
+        "join_id": null,
+        "join": {
+          "name": null,
+          "source_model": "car_retails_employees",
+          "dest_model": "car_retails_offices",
+          "link_type": "many_to_one",
+          "join_on": "${SOURCE.officecode} = ${DEST.officecode}"
+        },
+        "direction": "two_way"
+      },
+      {
+        "active": false,
+        "id": null,
+        "data_set_id": null,
+        "join_id": null,
+        "join": {
+          "name": null,
+          "source_model": "car_retails_employees",
+          "dest_model": "car_retails_employees",
+          "link_type": "many_to_one",
+          "join_on": "${SOURCE.reportsto} = ${DEST.employeenumber}"
+        },
+        "direction": "two_way"
+      }
+    ],
+    "related_joins": [
+      {
+        "name": null,
+        "source_model_id": "car_retails_products",
+        "dest_model_id": "car_retails_productlines",
+        "missing_dest_fields": null,
+        "missing_source_fields": null,
+        "data_source_id": 5,
+        "join_on": "${SOURCE.productline} = ${DEST.productline}",
+        "source_model": {
+          "id": "car_retails_products",
+          "name": "car_retails_products"
+        },
+        "dest_model": {
+          "id": "car_retails_productlines",
+          "name": "car_retails_productlines"
+        },
+        "id": null,
+        "link_type": "many_to_one"
+      },
+      {
+        "name": null,
+        "source_model_id": "car_retails_orderdetails",
+        "dest_model_id": "car_retails_products",
+        "missing_dest_fields": null,
+        "missing_source_fields": null,
+        "data_source_id": 5,
+        "join_on": "${SOURCE.productcode} = ${DEST.productcode}",
+        "source_model": {
+          "id": "car_retails_orderdetails",
+          "name": "car_retails_orderdetails"
+        },
+        "dest_model": {
+          "id": "car_retails_products",
+          "name": "car_retails_products"
+        },
+        "id": null,
+        "link_type": "many_to_one"
+      },
+      {
+        "name": null,
+        "source_model_id": "car_retails_orderdetails",
+        "dest_model_id": "car_retails_orders",
+        "missing_dest_fields": null,
+        "missing_source_fields": null,
+        "data_source_id": 5,
+        "join_on": "${SOURCE.ordernumber} = ${DEST.ordernumber}",
+        "source_model": {
+          "id": "car_retails_orderdetails",
+          "name": "car_retails_orderdetails"
+        },
+        "dest_model": {
+          "id": "car_retails_orders",
+          "name": "car_retails_orders"
+        },
+        "id": null,
+        "link_type": "many_to_one"
+      },
+      {
+        "name": null,
+        "source_model_id": "car_retails_payments",
+        "dest_model_id": "car_retails_customers",
+        "missing_dest_fields": null,
+        "missing_source_fields": null,
+        "data_source_id": 5,
+        "join_on": "${SOURCE.customernumber} = ${DEST.customernumber}",
+        "source_model": {
+          "id": "car_retails_payments",
+          "name": "car_retails_payments"
+        },
+        "dest_model": {
+          "id": "car_retails_customers",
+          "name": "car_retails_customers"
+        },
+        "id": null,
+        "link_type": "many_to_one"
+      },
+      {
+        "name": null,
+        "source_model_id": "car_retails_orders",
+        "dest_model_id": "car_retails_customers",
+        "missing_dest_fields": null,
+        "missing_source_fields": null,
+        "data_source_id": 5,
+        "join_on": "${SOURCE.customernumber} = ${DEST.customernumber}",
+        "source_model": {
+          "id": "car_retails_orders",
+          "name": "car_retails_orders"
+        },
+        "dest_model": {
+          "id": "car_retails_customers",
+          "name": "car_retails_customers"
+        },
+        "id": null,
+        "link_type": "many_to_one"
+      },
+      {
+        "name": null,
+        "source_model_id": "car_retails_customers",
+        "dest_model_id": "car_retails_employees",
+        "missing_dest_fields": null,
+        "missing_source_fields": null,
+        "data_source_id": 5,
+        "join_on": "${SOURCE.salesrepemployeenumber} = ${DEST.employeenumber}",
+        "source_model": {
+          "id": "car_retails_customers",
+          "name": "car_retails_customers"
+        },
+        "dest_model": {
+          "id": "car_retails_employees",
+          "name": "car_retails_employees"
+        },
+        "id": null,
+        "link_type": "many_to_one"
+      },
+      {
+        "name": null,
+        "source_model_id": "car_retails_employees",
+        "dest_model_id": "car_retails_offices",
+        "missing_dest_fields": null,
+        "missing_source_fields": null,
+        "data_source_id": 5,
+        "join_on": "${SOURCE.officecode} = ${DEST.officecode}",
+        "source_model": {
+          "id": "car_retails_employees",
+          "name": "car_retails_employees"
+        },
+        "dest_model": {
+          "id": "car_retails_offices",
+          "name": "car_retails_offices"
+        },
+        "id": null,
+        "link_type": "many_to_one"
+      },
+      {
+        "name": null,
+        "source_model_id": "car_retails_employees",
+        "dest_model_id": "car_retails_employees",
+        "missing_dest_fields": null,
+        "missing_source_fields": null,
+        "data_source_id": 5,
+        "join_on": "${SOURCE.reportsto} = ${DEST.employeenumber}",
+        "source_model": {
+          "id": "car_retails_employees",
+          "name": "car_retails_employees"
+        },
+        "dest_model": {
+          "id": "car_retails_employees",
+          "name": "car_retails_employees"
+        },
+        "id": null,
+        "link_type": "many_to_one"
+      }
+    ],
+    "from_aml": true,
+    "project_id": 1,
+    "permissions": {
+      "can_explore": true,
+      "can_crud": true,
+      "can_read": true,
+      "can_export_data": true
+    },
+    "id": 1
+  }
+}

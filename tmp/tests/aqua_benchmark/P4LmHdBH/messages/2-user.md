@@ -1,0 +1,1 @@
+What was the total price of the products shipped to Rovelli Gifts between 1/1/2003 and 12/31/2003?

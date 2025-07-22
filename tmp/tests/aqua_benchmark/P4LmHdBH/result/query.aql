@@ -1,0 +1,13 @@
+explore {
+  dimensions {
+
+  }
+  measures {
+    total_price: car_retails_orderdetails | sum(car_retails_orderdetails.quantityordered * car_retails_orderdetails.priceeach)
+  }
+  filters {
+    car_retails_customers.customername is "Rovelli Gifts",
+    car_retails_orders.shippeddate <= @2003-12-31,
+    car_retails_orders.shippeddate >= @2003-01-01
+  }
+}

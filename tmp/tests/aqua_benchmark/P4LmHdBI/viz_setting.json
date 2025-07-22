@@ -1,0 +1,105 @@
+{
+  "vizSetting": {
+    "viz_type": "data_table",
+    "fields": {
+      "table_fields": [
+        {
+          "path_hash": {
+            "model_id": "car_retails_offices",
+            "field_name": "city"
+          },
+          "type": "text",
+          "transformation": null,
+          "_alias": "office_city",
+          "custom_label": "Office City",
+          "format": {
+            "type": "string",
+            "format": {}
+          },
+          "uuid": "16ea5ee8-f21f-4350-88a3-e0e9f3168113"
+        },
+        {
+          "path_hash": {
+            "field_name": "employee_count"
+          },
+          "custom_label": "Employee Count",
+          "type": "number",
+          "aggregation": "custom",
+          "_alias": "employee_count",
+          "format": {
+            "type": "number",
+            "format": {
+              "pattern": "#,###"
+            }
+          },
+          "uuid": "899a08b0-a5d8-4764-bf8a-46b6177c2d81"
+        }
+      ]
+    },
+    "settings": {
+      "sort": [
+        {
+          "column": 0,
+          "sortOrder": true
+        }
+      ],
+      "misc": {
+        "row_limit": -1,
+        "custom_color_list": [
+          {}
+        ],
+        "pagination_size": 25,
+        "show_row_number": true,
+        "column_width": {
+          "type": "auto",
+          "manual_widths": {}
+        }
+      },
+      "conditional_formatting": [],
+      "aggregation": {
+        "show_total": false,
+        "show_average": false
+      },
+      "others": {
+        "include_empty_children_rows": false
+      },
+      "quick_pivot": false,
+      "pop_settings": null
+    },
+    "format": {},
+    "filters": [
+      {
+        "operator": "is",
+        "values": [
+          "Sydney"
+        ],
+        "modifier": null,
+        "path_hash": {
+          "model_id": "car_retails_offices",
+          "field_name": "city",
+          "is_metric": false
+        },
+        "aggregation": null,
+        "label": "Adhoc filter",
+        "dynamic_filter_id": null
+      }
+    ],
+    "amql": {
+      "adhoc_fields": [],
+      "conditions": [],
+      "filters": []
+    },
+    "adhoc_fields": [
+      {
+        "name": "employee_count",
+        "label": "Employee Count",
+        "type": "number",
+        "description": "",
+        "sql": "car_retails_employees | count_distinct(car_retails_employees.employeenumber)",
+        "syntax": "aql",
+        "aggregation_type": "custom",
+        "is_custom": true
+      }
+    ]
+  }
+}

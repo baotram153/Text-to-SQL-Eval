@@ -1,0 +1,11 @@
+explore {
+  dimensions {
+    cro_c_8a8b29: car_retails_offices.city
+  }
+  measures {
+    employee_count: car_retails_employees | count_distinct(car_retails_employees.employeenumber)
+  }
+  filters {
+    car_retails_offices.city is "Sydney"
+  }
+}
