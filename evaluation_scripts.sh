@@ -1,0 +1,1 @@
+python3 benchmark.py --gold python3 benchmark.py --gold .\mocked_data\gold_sql.txt --pred .\mocked_data\pred_sql.txt --table .\mocked_data\tables.json --etype match

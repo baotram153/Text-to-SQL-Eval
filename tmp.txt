@@ -1,0 +1,16 @@
+{'from': 
+    {'table_units': 
+        [('table_unit', '__products__')], 
+    'conds': []}, 
+'select': (False, [(0, (0, (0, '__products.productvendor__', False), None)), (5, (0, (0, '__products.buyprice__', False), None))]), 
+'where': [], 
+'groupBy': 
+    [(0, '__products.productvendor__', False)], 
+'having': [], 
+'orderBy': 
+    (['desc', 'asc'], 
+    [(0, (5, '__products.buyprice__', False), None), (0, (0, '__products.productvendor__', False), None)]), 
+'limit': None, 
+'intersect': None, 
+'union': None, 
+'except': None}
