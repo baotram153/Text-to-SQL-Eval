@@ -1,6 +1,7 @@
 import json
 import sqlite3
 from typing import Dict, List
+from utils.constants import *
 
 class Schema:
     """
@@ -28,7 +29,7 @@ class Schema:
             'city.id': '__city.id__',
             'city.name': '__city.name__', ...
         }
-        
+
         '''
         idMap = {'*': "__all__"}
         id = 1
@@ -39,6 +40,11 @@ class Schema:
 
         for key in schema:
             idMap[key.lower()] = "__" + key.lower() + "__"
+            id += 1
+
+        # add aggregations to schema
+        for agg in AGG_OPS[1:]:    # remove 'none'
+            idMap[agg.lower()] = "__" + agg.lower() + "__"
             id += 1
 
         return idMap
@@ -86,7 +92,7 @@ def get_schema_from_json(fpath):
     schema = {}
     for idx, table in enumerate(tables['table_names']):
         schema[table.lower()] = []
-        for col in tables['column_names']:
+        for col in tables['column_names_original']:
             if col[0] == idx:
                 schema[table.lower()].append(col[1].lower())
 

@@ -1,5 +1,5 @@
 CLAUSE_KEYWORDS = ('select', 'from', 'where', 'group', 'order', 'limit', 'intersect', 'union', 'except')
-JOIN_KEYWORDS = ('join', 'on', 'as')
+JOIN_KEYWORDS = ('join', 'on', 'as', 'left', 'right', 'natural', 'inner', 'outer')
 
 WHERE_OPS = ('not', 'between', '=', '>', '<', '>=', '<=', '!=', 'in', 'like', 'is', 'exists')
 UNIT_OPS = ('none', '-', '+', "*", '/')
@@ -13,4 +13,4 @@ COND_OPS = ('and', 'or')
 SQL_OPS = ('intersect', 'union', 'except')
 ORDER_OPS = ('desc', 'asc')
 
-KEYWORDS = CLAUSE_KEYWORDS + JOIN_KEYWORDS + WHERE_OPS + UNIT_OPS + AGG_OPS + COND_OPS + SQL_OPS + ORDER_OPS + ('by', )
+KEYWORDS = CLAUSE_KEYWORDS + JOIN_KEYWORDS + WHERE_OPS + UNIT_OPS + AGG_OPS + COND_OPS + SQL_OPS + ORDER_OPS + ('by', 'distinct')

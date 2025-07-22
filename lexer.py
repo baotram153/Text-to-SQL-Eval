@@ -11,6 +11,7 @@ class Lexer:
         self._toks = self.tokenize()
         self._alias_tables = self.scan_alias()
         print(f"After tokenization and scanning alias: {self._toks}, {self._alias_tables}")
+        print(f"Schema: {self._schema.idMap}")
 
     @property
     def toks(self):
@@ -92,13 +93,34 @@ class Lexer:
         print(f"Type dict: {self._type_dict}")
 
         for idx in range(len(self.toks) - 2, -1, -1):
-            if self.toks[idx] == 'as':
-                print(f"Found alias: {self.toks[idx+1]} -> {self.toks[idx-1]}")
-                # remove quotes from alias/table names
-                self.toks[idx-1] = self._check_quote_in_name(self.toks[idx-1])
-                self.toks[idx+1] = self._check_quote_in_name(self.toks[idx+1])
-                # add alias to dict
-                alias[self.toks[idx+1]] = self.toks[idx-1]
+            if (self.toks[idx] == 'as'
+                and self.toks[idx-1] not in (',')
+                and self.toks[idx+1] not in (',')):
+                # breakpoint()
+                if self.toks[idx-1] == ')':  # aggregation as alias
+                    # find the matching '(' - there are possibly multiple '('
+                    # e.g. `sum((priceforeach*quantity)) as foo`
+                    match = -1
+                    last_paren_idx = 0
+                    for i in range(idx-2, -1, -1):
+                        if self.toks[i] == '(':
+                            match += 1
+                        elif self.toks[i] == ')':
+                            match -= 1
+                        if match == 0:
+                            last_paren_idx = i
+                            break
+                    agg_op = self.toks[last_paren_idx-1]
+                    # breakpoint()
+                    alias[self.toks[idx+1]] = agg_op
+                else:
+                    print(f"Found alias: {self.toks[idx+1]} -> {self.toks[idx-1]}")
+                    # remove quotes from alias/table names
+                    self.toks[idx-1] = self._check_quote_in_name(self.toks[idx-1])
+                    self.toks[idx+1] = self._check_quote_in_name(self.toks[idx+1])
+                    # add alias to dict
+                    alias[self.toks[idx+1]] = self.toks[idx-1]
+
             if (self._type_dict[idx] == self._type_dict[idx + 1] == 'id'
                 and self.toks[idx]   not in ('(', ')', ',')
                 and self.toks[idx+1] not in ('(', ')', ',')):
@@ -121,12 +143,15 @@ class Lexer:
         for key in schema.schema_dict:
             assert key not in self._alias_tables, "Alias {} has the same name in table".format(key)
             self._alias_tables[key] = key
-        print(f"Alias tables: {self._alias_tables}")
 
         # remove quotes from alias names
-        for tok in self.toks:
-            if tok in self._alias_tables.keys():
-                self._alias_tables[tok] = self._check_quote_in_name(self._alias_tables[tok])
+        for idx, tok in enumerate(self.toks):
+            # breakpoint() if tok in self._alias_tables.keys() else None
+            if tok in self._alias_tables and (tok[0] == tok[-1] == '"' or tok[0] == tok[-1] == "'"):
+                new_key = tok[1:-1]
+                self._alias_tables[new_key] = self._alias_tables.pop(tok)
+                self.toks[idx] = new_key
+        print(f"Alias tables after merging: {self._alias_tables}")
         return self._alias_tables
 
     def _check_quote_in_name(self, name: str) -> str:

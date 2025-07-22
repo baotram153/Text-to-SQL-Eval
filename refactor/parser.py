@@ -3,6 +3,9 @@ from utils.schema import Schema
 from typing import Dict, List, Union
 from utils.constants import *
 from .nodes import *
+import logging
+
+logger = logging.getLogger(__name__)
 
 class Parser:
     def __init__(
@@ -90,6 +93,7 @@ class Parser:
 
         # jump back to 'select' and parse it using default_tables
         self._jump(select_idx)
+        # breakpoint()
         select = self.parse_select(default_tables)
         self._sql.select = select
 
@@ -128,31 +132,31 @@ class Parser:
         joins = []
         table_unit = None
 
-        while self._pos < len(self._toks):
-            isBlock = False
-            if self._peek() == '(':
-                isBlock = True
-                self._advance()  # skip '('
+        isBlock = False
+        if self._peek() == '(':
+            isBlock = True
+            self._advance()  # skip '('
 
-            if self._peek() == 'select':
-                sql = self._parse_sql()
-                table_unit = sql
-            else:
-                table_unit, table_name = self.parse_table_ref()
-                default_tables.append(table_name)
+        if self._peek() == 'select':
+            sql = self._parse_sql()
+            table_unit = sql
+        else:
+            table_unit, table_name = self.parse_table_ref()
+            default_tables.append(table_name)
 
+        while True:
             if self._peek() in ('join', 'inner', 'outer', 'natural', 'left', 'right', ','):
                 joins.append(self.parse_join(default_tables))
-
-            if isBlock:
-                self._consume(')')
-
-            if self._peek() in CLAUSE_KEYWORDS or self._peek() in (")", ";"):
+            else:
                 break
+
+        if isBlock:
+            self._consume(')')
 
         return From(table_unit, joins), default_tables
 
     def parse_join(self, default_tables: List[str]) -> Join:
+        # breakpoint()
         assert self._peek() in ('join', 'inner', 'outer', 'natural', 'left',  'right', ','), "Expected 'join' or ',' keyword"
         join_type = self._pop()
         join_type = join_type if join_type != ',' else 'decartes'
@@ -182,6 +186,8 @@ class Parser:
 
 
     def parse_select(self, default_tables):
+        logger.debug(f"Parsing select statement, current position: {self._pos}, next token: {self._peek()}")
+        logger.debug(f"Clause keywords: {CLAUSE_KEYWORDS}")
         select_tok = self._pop()
         assert select_tok == 'select', "'select' not found"
 
@@ -230,9 +236,9 @@ class Parser:
             [condition1, 'and', condition2, 'or', condition3, ...]
             where condition is a tuple of the form: (not_op, op_id, val_unit, val1, val2)
         '''
+        logger.debug(f"In parse_condition, current position: {self._pos}, next token: {self._peek()}")
         conds = []
-        print(f"In parse_condition, current position: {self._pos}, next token: {self._peek()}")
-
+        # breakpoint()
         while self._pos < len(self._toks):
             col_unit = self.parse_col_unit(default_tables)
             not_op = False
@@ -245,6 +251,7 @@ class Parser:
             op_id = WHERE_OPS.index(op_tok)
             self._advance()
 
+            # breakpoint()
             print(f"In parse_condition, current position: {self._pos}, next token: {self._peek()}")
             val1 = val2 = None
             if op_id == WHERE_OPS.index('between'):
@@ -258,7 +265,7 @@ class Parser:
             conds.append(Cond(not_op, op_id, col_unit, val1, val2))     # append the condition tuple
 
             # check for clause/join/ending
-            if self._peek() in CLAUSE_KEYWORDS or self._peek() in (")", ";") or self._peek() in JOIN_KEYWORDS:
+            if self._peek() in CLAUSE_KEYWORDS+JOIN_KEYWORDS or self._peek() in (")", ";"):
                 break
 
             # check for AND/OR
@@ -283,23 +290,20 @@ class Parser:
             isBlock = True
             self._advance()
         
-        while True:
-            if self._peek() == 'distinct':
-                isDistinct = True
-                self._advance()
+        if self._peek() == 'distinct':
+            isDistinct = True
+            self._advance()
 
-            if self._peek() in AGG_OPS:
-                agg = self.parse_agg(default_tables)
+        if self._peek() in AGG_OPS:
+            agg = self.parse_agg(default_tables)
 
-            else:
-                col_unit1 = self.parse_col_ref(default_tables)
+        else:
+            col_unit1 = self.parse_col_ref(default_tables)
 
-            if self._peek() in UNIT_OPS:
-                unit_op = UNIT_OPS.index(self._pop())
-                col_unit2 = self.parse_col_unit(default_tables)
+        if self._peek() in UNIT_OPS:
+            unit_op = UNIT_OPS.index(self._pop())
+            col_unit2 = self.parse_col_unit(default_tables)
 
-            if self._peek() in CLAUSE_KEYWORDS+WHERE_OPS or self._peek() in (")", ";", None):
-                break
 
         if isBlock:
             self._consume(')')
@@ -307,14 +311,23 @@ class Parser:
             if agg is not None:
                 return Agg(agg[0], col_unit1, isDistinct)
             return Arith(unit_op, col_unit1, col_unit2, isDistinct)
-        return col_unit1
+        else:
+            if agg:
+                return agg
+            return col_unit1
 
     def parse_col_ref(self, default_tables):
         """
             :returns column id , column name
         """
+        # breakpoint()
+        print(f"In parse_col_ref, current position: {self._pos}, next token: {self._peek()}")
+        isBlock = False
+        if self._peek() == '(':
+            isBlock = True
+            self._advance()
+
         col_tok = self._peek()
-        print(f"In parse_col_ref, current position: {self._pos}, next token: {col_tok}")
         if col_tok == "*":
             self._advance()
             return ColRef(self._schema.idMap[col_tok],col_tok)
@@ -334,7 +347,17 @@ class Parser:
                 self._advance()
                 return ColRef(self._schema.idMap[key], key)
 
-        assert False, "Error col: {}".format(col_tok)
+        # aggregation, arithmetic ops
+        try:
+            agg_op = self._alias_tables[col_tok]
+            if agg_op in AGG_OPS:
+                self._advance()
+                return ColRef(agg_op, self._schema.idMap[agg_op])
+        except:
+            assert False, "Error col: {}".format(col_tok)
+        
+        if isBlock:
+            self._consume(')')
 
     def parse_agg(self, default_tables):
         """
@@ -346,7 +369,7 @@ class Parser:
 
     def parse_value(self, default_tables):
         value_tok = self._peek()
-        print(f"In parse_value, current position: {self._pos}, next token: {value_tok}")
+        logger.debug(f"Current position: {self._pos}, next token: {value_tok}")
         # case value is a literal string
         if (value_tok.startswith('"') and value_tok.endswith('"')) or (value_tok.startswith("'") and value_tok.endswith("'")):
             val = self._pop()
@@ -366,7 +389,7 @@ class Parser:
         :returns: a list of conditions
         """
         if self._peek() != 'where':
-            return []
+            return Where([])
         self._advance()  # skip 'where'
         conds = self.parse_condition(default_tables)
         return Where(conds)
@@ -376,8 +399,8 @@ class Parser:
         :returns: a tuple (col_units, column_group_units), where one is always empty.
         """
         if self._peek() != 'group':
-            return []
-        self._andvance(2)  # skip 'group by'
+            return GroupBy([])
+        self._advance(2)  # skip 'group by'
         col_units = []
         while True:
             try:
@@ -402,7 +425,7 @@ class Parser:
         :returns: a list of conditions in the HAVING clause.
         """
         if self._peek() != 'having':
-            return []
+            return Having([])
         self._advance()  # skip 'having'
         conds = self.parse_condition(default_tables)
         return Having(conds)
@@ -412,13 +435,15 @@ class Parser:
         Returns: a tuple (order_type, val_units) where order_type is 'asc' or 'desc',
         and val_units is a list of value units to order by.
         """
+        print(f"In parse_order_by, current position: {self._pos}, next token: {self._peek()}")
         order_cols = []
 
         if self._peek() != 'order':
-            return order_cols
+            return OrderBy([])
         self._advance(2) # skip 'order by'
 
         while True:
+            # breakpoint()
             # check if the next token is a number
             try:
                 next_tok = int(self._peek())
@@ -428,7 +453,9 @@ class Parser:
                     order_cols.append((col_unit, self._pop()))
             except ValueError:
                 col_unit = self.parse_col_unit(default_tables)
-                order_cols.append((col_unit, self._pop()))
+                if self._peek() in ORDER_OPS:
+                    order_cols.append((col_unit, self._pop()))
+                # breakpoint()
             if self._peek() == ',':
                 self._advance()  # skip ','
             else:
