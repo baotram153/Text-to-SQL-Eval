@@ -10,6 +10,7 @@ class Lexer:
         self._type_dict = []
         self._toks = self.tokenize()
         self._alias_tables = self.scan_alias()
+        print(f"After tokenization and scanning alias: {self._toks}, {self._alias_tables}")
 
     @property
     def toks(self):
@@ -48,6 +49,15 @@ class Lexer:
             if tok in vals:
                 toks[i] = vals[tok]  # restore quoted value
                 print(f"Tokenized: {tok} -> {toks[i]}")
+            else:
+                # __val1__.__val2__" -> compare if each part is in vals
+                if '.' in tok:
+                    parts = tok.split('.')
+                    for j, part in enumerate(parts):
+                        if part in vals:
+                            parts[j] = vals[part][1:-1]  # remove quotes from value
+                    toks[i] = '.'.join(parts)
+                    print(f"Tokenized: {tok} -> {toks[i]}")
 
         # merge operators (!=, >=, <=)
         i = 1

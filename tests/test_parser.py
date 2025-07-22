@@ -82,8 +82,9 @@ def test_multiple_conditions(mock_schema):
     lexer = Lexer(sql, mock_schema)
     parser = Parser(lexer, mock_schema)
     result = parser.parse()
-    assert isinstance(result.where, list)
-    assert len(result.where) == 2
+    print(f"Parsed SQL: {result}")
+    assert isinstance(result.where.conds, list)
+    assert len(result.where.conds) == 3     # 2 conditions + 1 AND
 
 ########################### TEST ALIASES ###########################
 def test_alias(mock_schema):
@@ -91,4 +92,5 @@ def test_alias(mock_schema):
     lexer = Lexer(sql, mock_schema)
     parser = Parser(lexer, mock_schema)
     result = parser.parse()
-    assert result.select.col_units[0].col_name == 'e.firstname'
+    assert result.select.col_units[0].col_name == 'employees.firstname'
+    assert result.select.col_units[0].col_id == '__employees.firstname__'

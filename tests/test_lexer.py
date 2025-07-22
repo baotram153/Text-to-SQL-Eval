@@ -76,3 +76,23 @@ def test_multiple_aliases(mock_schema):
     sql = "SELECT avg_price FROM (SELECT AVG(p.buyprice) AS avg_price FROM car_retails.products AS p)"
     lexer = Lexer(sql, mock_schema)
     assert lexer.toks == ['select', 'avg_price', 'from', '(', 'select', 'avg', '(', 'p.buyprice', ')', 'as', 'avg_price', 'from', 'products', 'as', 'p', ')']
+    
+def test_string_in_quotes(mock_schema):
+    sql = "SELECT employeenumber FROM employees as e WHERE e.firstname = 'John Doe'"
+    lexer = Lexer(sql, mock_schema)
+    assert lexer.toks == ['select', 'employeenumber', 'from', 'employees', 'as', 'e', 'where', 'e.firstname', '=', '"John Doe"']
+    
+def test_string_in_quotes_wo_space(mock_schema):
+    sql = "SELECT employeenumber FROM employees as e WHERE e.firstname = 'John'"
+    lexer = Lexer(sql, mock_schema)
+    assert lexer.toks == ['select', 'employeenumber', 'from', 'employees', 'as', 'e', 'where', 'e.firstname', '=', '"John"']
+    
+def test_table_name_in_quotes(mock_schema):
+    sql = "SELECT * FROM 'car_retails'.\"employees\""
+    lexer = Lexer(sql, mock_schema)
+    assert lexer.toks == ['select', '*', 'from', 'employees']
+    
+def test_col_name_in_quotes(mock_schema):
+    sql = "SELECT 'car_retails'.offices.'officecode' from 'car_retails'.offices"
+    lexer = Lexer(sql, mock_schema)
+    assert lexer.toks == ['select', 'offices.officecode', 'from', 'offices']

@@ -1,2 +1,6 @@
 tmp/cache/*
-*/*pyc*/
+# Ignore files containing 'cpython' in any subdirectory
+**/*cpython*
+
+# Ignore Python bytecode files in any subdirectory
+**/*.pyc
