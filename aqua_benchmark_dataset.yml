@@ -1,0 +1,1074 @@
+test_cases:
+  - id: car_retails_1
+    dataset_id: car_retails
+    question: List the country and how many customers are there.
+    context: null
+    evidence: null
+    tags:
+      - tech:calc
+    sql:
+      - query: SELECT country, COUNT(customerNumber) AS customer_count FROM customers GROUP BY country
+      - query: SELECT country, COUNT(*) AS customer_count FROM car_retails GROUP BY country
+    aql:
+      - query: |
+          metric customer_count = car_retails_customers | count(car_retails_customers.customernumber);
+          explore {
+            dimensions {
+              country: car_retails_customers.country
+            }
+            measures {
+              customer_count: customer_count
+            }
+          }
+    complexity: 1
+  - id: car_retails_2
+    dataset_id: car_retails
+    question: Which different vendor has the most amount of orders? Calculate the total estimated earnings.
+    context: null
+    evidence: amount of order refers to number of quantityOrdered; most amount of orders refers to SUM(QuantityOrdered); estimated earnings refers to expected profits; expected profits = SUBTRACT(msrp, buyPrice); in aql expression, should state all related fields of metrics to the dimensions part
+    tags:
+      - tech:calc
+    sql:
+      - query: SELECT DISTINCT T1.productVendor, T1.MSRP - T1.buyPrice FROM products AS T1 INNER JOIN orderdetails AS T2 ON T1.productCode = T2.productCode GROUP BY T1.productVendor, T1.MSRP, T1.buyPrice ORDER BY SUM(T2.quantityOrdered) DESC LIMIT 1
+      - query: SELECT productVendor, SUM(quantityOrdered) AS total_quantity_ordered, (SUM(msrp) - SUM(buyPrice)) AS profit_margin FROM car_retails_products INNER JOIN car_retails_order_details ON car_retails_products.product_code = car_retails_order_details.product_code GROUP BY productVendor ORDER BY total_quantity_ordered DESC LIMIT 1
+    aql:
+      - query: |
+          metric profit_margin = car_retails_products.msrp - car_retails_products.buyprice;
+          metric total_quantity_ordered = car_retails_orderdetails.quantityordered | sum();
+          explore {
+            dimensions {
+              productvendor: car_retails_products.productvendor,
+              msrp: car_retails_products.msrp,
+              buyprice: car_retails_products.buyprice
+            }
+            measures {
+              profit_margin: profit_margin,
+              total_quantity_ordered: total_quantity_ordered
+            }
+          }
+    complexity: 1
+  - id: car_retails_3
+    dataset_id: car_retails
+    question: Which sales representatives generated the highest payment revenue in 2004?
+    context: null
+    evidence: null
+    tags:
+      - tech:calc
+      - tech:filter
+    sql:
+      - query: SELECT e.firstName AS first_name, e.lastName AS last_name, SUM(p.amount) AS total_payment FROM payments p LEFT JOIN customers c ON p.customerNumber = c.customerNumber LEFT JOIN employees e ON c.salesRepEmployeeNumber = e.employeeNumber WHERE p.paymentDate >= '2004-01-01' AND p.paymentDate < '2005-01-01' GROUP BY e.firstName, e.lastName ORDER BY total_payment DESC
+    aql:
+      - query: |
+          metric total_payment = car_retails_payments | sum(car_retails_payments.amount);
+          explore {
+            dimensions {
+              sales_rep_first_name: car_retails_employees.firstname,
+              sales_rep_last_name: car_retails_employees.lastname
+            }
+            measures {
+              total_payment: total_payment
+            }
+            filters {
+              car_retails_payments.paymentdate matches @(2004)
+            }
+          }
+    complexity: 3
+  - id: car_retails_4
+    dataset_id: car_retails
+    question: What was the total price of the products shipped to Rovelli Gifts between 1/1/2003 and 12/31/2003?
+    context: null
+    evidence: Mini Gifts is the customer name; shippedDate between '2003-01-01' and '2003-12-31'; total price = MULTIPLY(quantityOrdered, priceEach);
+    tags:
+      - tech:calc
+      - tech:filter
+    sql:
+      - query: SELECT SUM(od.quantityOrdered * od.priceEach) AS total_product_price FROM car_retails.orderdetails od JOIN car_retails.orders o ON od.orderNumber = o.orderNumber JOIN car_retails.customers c ON o.customerNumber = c.customerNumber WHERE c.customerName = 'Rovelli Gifts Distributors Ltd.' AND o.shippedDate >= '2003-01-01' AND o.shippedDate <= '2003-12-31'
+    aql:
+      - query: |
+          metric total_product_price = car_retails_orderdetails | sum(car_retails_orderdetails.quantityordered * car_retails_orderdetails.priceeach);
+          explore {
+            dimensions {}
+            measures {
+              total_product_price: total_product_price
+            }
+            filters {
+              car_retails_customers.customername matches 'Rovelli Gifts',
+              car_retails_orders.shippeddate matches @(2003)
+            }
+          }
+    complexity: 4
+  - id: car_retails_5
+    dataset_id: car_retails
+    question: How many employees are there in Sydney?
+    context: null
+    evidence: Sydney is the city name; count of employees refers to number of employees in the city;
+    tags:
+      - tech:calc
+      - tech:filter
+    sql:
+      - query: SELECT COUNT(*) AS employee_count FROM car_retails.employees LEFT JOIN car_retails.offices ON car_retails.employees.officeCode = car_retails.offices.officeCode WHERE city = 'Sydney'
+    aql:
+      - query: |
+          metric employee_count = car_retails_employees | count(car_retails_employees.employeenumber);
+          explore {
+            dimensions {
+              city: car_retails_offices.city
+            }
+            measures {
+              employee_count: employee_count
+            }
+            filters {
+              car_retails_offices.city is "Sydney"
+            }
+          }
+    complexity: 5
+  - id: car_retails_6
+    dataset_id: car_retails
+    question: Which sales representatives in New York city whose leader is Anthony Bow with the employee number is 1143? Indicate their employee numbers.
+    context: null
+    evidence: reportsTo is the leader of the employeeNumber; NYC is New York City
+    tags: []
+    sql:
+      - query: SELECT T1.employeeNumber FROM employees AS T1 INNER JOIN offices AS T2 ON T1.officeCode = T2.officeCode WHERE T1.reportsTo = 1143 AND T2.city = 'NYC'
+    aql: []
+    complexity: null
+  - id: car_retails_7
+    dataset_id: car_retails
+    question: What is the average, highest and lowest annual payments collected between 1/1/2003 to 12/31/2005?
+    context: null
+    evidence: paymentDate BETWEEN '2003-01-01' AND '2005-12-31'; average annual payments = DIVIDE(SUM(amount), 3);
+    tags: []
+    sql:
+      - query: SELECT CAST(SUM(T1.amount) AS REAL) / 3, MAX(T1.amount) , MIN(T1.amount) FROM payments AS T1 INNER JOIN customers AS T2 ON T1.customerNumber = T2.customerNumber WHERE T1.paymentDate BETWEEN '2003-01-01' AND '2005-12-31'
+    aql: []
+    complexity: null
+  - id: car_retails_8
+    dataset_id: car_retails
+    question: Which countries do the top 5 highest paying customers in a single payment come from? Indicate their entire address.
+    context: null
+    evidence: highest paying customer refers to MAX(amount); entire address = addressLine1+addressLine2;
+    tags: []
+    sql:
+      - query: SELECT DISTINCT T2.country, T2.addressLine1, T2.addressLine2 FROM payments AS T1 INNER JOIN customers AS T2 ON T1.customerNumber = T2.customerNumber ORDER BY T1.amount DESC LIMIT 5
+    aql: []
+    complexity: null
+  - id: car_retails_9
+    dataset_id: car_retails
+    question: How many checks were issued by Euro+ Shopping Channel in the year 2004?
+    context: null
+    evidence: Euro+ Shopping Channel is a customer name; year(paymentDate) = '2004';
+    tags: []
+    sql:
+      - query: SELECT COUNT(T1.checkNumber) FROM payments AS T1 INNER JOIN customers AS T2 ON T1.customerNumber = T2.customerNumber WHERE customerName = 'Euro+ Shopping Channel' AND STRFTIME('%Y', T1.paymentDate) = '2004'
+    aql: []
+    complexity: null
+  - id: car_retails_10
+    dataset_id: car_retails
+    question: Of all the classic cars, with a product scale of 1:18, which product is the most ordered product by customers?
+    context: null
+    evidence: classic car is a product line; most ordered product refers to MAX(quantityOrdered);
+    tags: []
+    sql:
+      - query: SELECT T1.productName FROM products AS T1 INNER JOIN orderdetails AS T2 ON T1.productCode = T2.productCode WHERE T1.productScale = '1:18' AND T1.productLine = 'Classic Cars' GROUP BY T1.productName ORDER BY SUM(T2.quantityOrdered) DESC LIMIT 1
+    aql: []
+    complexity: null
+  - id: car_retails_11
+    dataset_id: car_retails
+    question: How many customers have a credit limit of not more than 100,000 and which customer made the highest total payment amount for the year 2004?
+    context: null
+    evidence: Count the distinct customers whose creditLimit <= 100,000 and who made at least one payment in 2004; from that same set of customers, return the one whose SUM(amount) for year 2004 is the greatest
+    tags: []
+    sql:
+      - query: SELECT ( SELECT COUNT(customerNumber) FROM customers WHERE creditLimit <= 100000 AND customerNumber IN ( SELECT customerNumber FROM payments WHERE STRFTIME('%Y', paymentDate) = '2004' ) ), T1.customerName FROM customers AS T1 INNER JOIN payments AS T2 ON T1.customerNumber = T2.customerNumber WHERE T1.creditLimit <= 100000 AND STRFTIME('%Y', T2.paymentDate) = '2004' GROUP BY T1.customerNumber, T1.customerName ORDER BY SUM(T2.amount) DESC LIMIT 1
+    aql: []
+    complexity: null
+  - id: car_retails_12
+    dataset_id: car_retails
+    question: Which of the customers, whose Tokyo-based sales representative reports to the Vice President of Sales whose employee number is 1056, has paid the highest payment? List the customer's name, the contact person and calculate the total amount of that customer's total payments.
+    context: null
+    evidence: Tokyo office identified by offices.city = 'Tokyo'; sales reps report to employee 1056 if employees.reportsTo = 1056; find customer with highest total payments by SUM(payments.amount) grouped by customer, ordered DESC, LIMIT 1
+    tags: []
+    sql:
+      - query: SELECT T2.customerName, T2.contactFirstName, T2.contactLastName, SUM(T3.amount) FROM employees AS T1 INNER JOIN customers AS T2 ON T2.salesRepEmployeeNumber = T1.employeeNumber INNER JOIN payments AS T3 ON T2.customerNumber = T3.customerNumber INNER JOIN offices AS T4 ON T1.officeCode = T4.officeCode WHERE T4.city = 'Tokyo' AND T1.reportsTo = 1056 GROUP BY T2.customerName, T2.contactFirstName, T2.contactLastName ORDER BY amount DESC LIMIT 1
+    aql: []
+    complexity: null
+  - id: car_retails_13
+    dataset_id: car_retails
+    question: Which two products has the highest and lowest expected profits? Determine the total price for each product in terms of the largest quantity that was ordered.
+    context: null
+    evidence: expected profits = MSRP - buyPrice; find product with highest profit (ORDER BY DESC LIMIT 1) and lowest profit (ORDER BY ASC LIMIT 1); total price = SUM(quantityOrdered * priceEach) for all orders of each product
+    tags: []
+    sql:
+      - query: SELECT T2.productName, SUM(T1.quantityOrdered * T1.priceEach) FROM orderdetails AS T1 INNER JOIN ( SELECT productCode, productName FROM products ORDER BY MSRP - buyPrice DESC LIMIT 1 ) AS T2 ON T1.productCode = T2.productCode UNION SELECT T2.productName, SUM(quantityOrdered * priceEach) FROM orderdetails AS T1 INNER JOIN ( SELECT productCode, productName FROM products ORDER BY MSRP - buyPrice ASC LIMIT 1 ) AS T2 ON T1.productCode = T2.productCode
+    aql: []
+    complexity: null
+  - id: car_retails_14
+    dataset_id: car_retails
+    question: How many different orders with a total price greater than 4000 are cancelled?
+    context: null
+    evidence: Query checks if ANY line item > 4000, not total order > 4000; total price per line = quantityOrdered * priceEach; cancelled orders have status = 'Cancelled'
+    tags: []
+    sql:
+      - query: SELECT COUNT(DISTINCT T1.orderNumber) FROM orderdetails AS T1 INNER JOIN orders AS T2 ON T1.orderNumber = T2.orderNumber WHERE T1.quantityOrdered * T1.priceEach > 4000 AND T2.status = 'Cancelled'
+    aql: []
+    complexity: null
+  - id: car_retails_15
+    dataset_id: car_retails
+    question: How many distinct orders were there in 2003 when the quantity ordered was less than 30?
+    context: null
+    evidence: Orders placed in 2003 (year(orderDate) = '2003') that have AT LEAST ONE line item with quantityOrdered < 30; counts distinct orderNumbers
+    tags: []
+    sql:
+      - query: SELECT COUNT(DISTINCT T1.orderNumber) FROM orderdetails AS T1 INNER JOIN orders AS T2 ON T1.orderNumber = T2.orderNumber WHERE T1.quantityOrdered < 30 AND STRFTIME('%Y', T2.orderDate) = '2003'
+    aql: []
+    complexity: null
+  - id: car_retails_16
+    dataset_id: car_retails
+    question: What is the total value of cancelled orders?
+    context: null
+    evidence: total value = SUM(quantityOrdered * priceEach); cancelled orders refers to status = 'Cancelled'
+    tags: []
+    sql:
+      - query: SELECT SUM(T1.quantityOrdered * T1.priceEach) FROM orderdetails AS T1 INNER JOIN orders AS T2 ON T1.orderNumber = T2.orderNumber WHERE T2.status = 'Cancelled'
+    aql: []
+    complexity: null
+  - id: car_retails_17
+    dataset_id: car_retails
+    question: Please calculate the total value of Motorcycles orders.
+    context: null
+    evidence: Motorcycles is a product line (products.productLine = 'Motorcycles'); total value = SUM(quantityOrdered * priceEach) for all orderdetails of Motorcycles products
+    tags: []
+    sql:
+      - query: SELECT SUM(T1.quantityOrdered * T1.priceEach) FROM orderdetails AS T1 INNER JOIN products AS T2 ON T1.productCode = T2.productCode WHERE T2.productLine = 'Motorcycles'
+    aql: []
+    complexity: null
+  - id: car_retails_18
+    dataset_id: car_retails
+    question: How many Planes orders were there?
+    context: null
+    evidence: Planes is a product line; counts order lines (not distinct orders) for products where productLine = 'Planes'
+    tags: []
+    sql:
+      - query: SELECT COUNT(T1.productCode) FROM orderdetails AS T1 INNER JOIN products AS T2 ON T1.productCode = T2.productCode WHERE T2.productLine = 'Planes'
+    aql: []
+    complexity: null
+  - id: car_retails_19
+    dataset_id: car_retails
+    question: How many orders which expected profits greater than 100?
+    context: null
+    evidence: expected profits = MSRP - buyPrice > 100; counts order lines (not distinct orders) for products with profit margin > 100
+    tags: []
+    sql:
+      - query: SELECT COUNT(T1.productCode) FROM orderdetails AS T1 INNER JOIN products AS T2 ON T1.productCode = T2.productCode WHERE T2.MSRP - T2.buyPrice > 100
+    aql: []
+    complexity: null
+  - id: car_retails_20
+    dataset_id: car_retails
+    question: Please calculate the average total price of orders from Exoto Designs Vendor in 2005.
+    context: null
+    evidence: Query calculates total revenue / count of orders, not true average per order; Exoto Designs is productVendor; year(orderDate) = '2005'
+    tags: []
+    sql:
+      - query: SELECT SUM(T2.quantityOrdered * T2.priceEach) / COUNT(T3.orderNumber) FROM products AS T1 INNER JOIN orderdetails AS T2 ON T1.productCode = T2.productCode INNER JOIN orders AS T3 ON T2.orderNumber = T3.orderNumber WHERE T1.productVendor = 'Exoto Designs' AND STRFTIME('%Y', T3.orderDate) = '2005'
+    aql: []
+    complexity: null
+  - id: car_retails_21
+    dataset_id: car_retails
+    question: How many sales representatives who have office code is 1?
+    context: null
+    evidence: sales representative refers to jobTitle = 'Sales Rep'; officeCode = 1
+    tags: []
+    sql:
+      - query: SELECT COUNT(officeCode) FROM employees WHERE jobTitle = 'Sales Rep' AND officeCode = 1
+    aql: []
+    complexity: null
+  - id: car_retails_22
+    dataset_id: car_retails
+    question: Please list different customer names with the payment amount of over 50,000.
+    context: null
+    evidence: amount > 50000; returns distinct customer names who made at least one payment over 50,000
+    tags: []
+    sql:
+      - query: SELECT DISTINCT T2.customerName FROM payments AS T1 INNER JOIN customers AS T2 ON T1.customerNumber = T2.customerNumber WHERE T1.amount > 50000
+    aql: []
+    complexity: null
+  - id: car_retails_23
+    dataset_id: car_retails
+    question: Please calculate the total payment amount of customers who come from the USA.
+    context: null
+    evidence: USA is a country; total payment amount = SUM(amount) for customers where country = 'USA'
+    tags: []
+    sql:
+      - query: SELECT SUM(T1.amount) FROM payments AS T1 INNER JOIN customers AS T2 ON T1.customerNumber = T2.customerNumber WHERE T2.country = 'USA'
+    aql: []
+    complexity: null
+  - id: car_retails_24
+    dataset_id: car_retails
+    question: What are the total payments of customers with no credit limit in 2003?
+    context: null
+    evidence: no credit limit = creditLimit = 0; year(paymentDate) = '2003'; total payments = SUM(amount)
+    tags: []
+    sql:
+      - query: SELECT SUM(amount) FROM payments WHERE STRFTIME('%Y', paymentDate) = '2003' AND customerNumber IN ( SELECT customerNumber FROM customers WHERE creditLimit = 0 )
+    aql: []
+    complexity: null
+  - id: car_retails_25
+    dataset_id: car_retails
+    question: Please list the name and phone number of the customer whose order was cancelled.
+    context: null
+    evidence: cancelled order refers to status = 'Cancelled'; returns all customers (not distinct) who have cancelled orders
+    tags: []
+    sql:
+      - query: SELECT T2.customerName, T2.phone FROM orders AS T1 INNER JOIN customers AS T2 ON T1.customerNumber = T2.customerNumber WHERE T1.status = 'Cancelled'
+    aql: []
+    complexity: null
+  - id: car_retails_26
+    dataset_id: car_retails
+    question: How many French customers shipped 2 orders which have been cancelled?
+    context: null
+    evidence: French customers = country='France'; cancelled = status='Cancelled'; finds customers with exactly 2 cancelled orders; returns 0 customers
+    tags: []
+    sql:
+      - query: SELECT COUNT(DISTINCT customerNumber) FROM (SELECT T2.customerNumber FROM orders AS T1 INNER JOIN customers AS T2 ON T1.customerNumber = T2.customerNumber WHERE T1.status = 'Cancelled' AND T2.country = 'France' GROUP BY T2.customerNumber HAVING COUNT(T1.orderNumber) = 2)
+    aql: []
+    complexity: null
+  - id: car_retails_27
+    dataset_id: car_retails
+    question: Please calculate the average total price of shipped orders from German customers.
+    context: null
+    evidence: NOTE Query divides total revenue by order detail count not order count; German customers = country='Germany'; shipped = status='Shipped'; result 3168.89 is lower than true average per order
+    tags: []
+    sql:
+      - query: SELECT SUM(T3.quantityOrdered * T3.priceEach) / COUNT(T2.orderNumber) FROM customers AS T1 INNER JOIN orders AS T2 ON T1.customerNumber = T2.customerNumber INNER JOIN orderdetails AS T3 ON T2.orderNumber = T3.orderNumber WHERE T2.status = 'Shipped' AND T1.country = 'Germany'
+    aql: []
+    complexity: null
+  - id: car_retails_28
+    dataset_id: car_retails
+    question: List out full name of employees who are working in Tokyo?
+    context: null
+    evidence: Tokyo is city in offices table; full name = firstName + lastName; join employees to offices on officeCode; returns 2 employees
+    tags: []
+    sql:
+      - query: SELECT T1.firstName, T1.lastName FROM employees AS T1 INNER JOIN offices AS T2 ON T1.officeCode = T2.officeCode WHERE T2.city = 'Tokyo'
+    aql: []
+    complexity: null
+  - id: car_retails_29
+    dataset_id: car_retails
+    question: How many Sales Rep who are working in Tokyo? List out email and full name of those employees.
+    context: null
+    evidence: Sales Rep = jobTitle; Tokyo office city; query returns 2 sales reps with names and emails; question asks count but SQL lists details
+    tags: []
+    sql:
+      - query: SELECT T1.firstName, T1.lastName, T1.email FROM employees AS T1 INNER JOIN offices AS T2 ON T1.officeCode = T2.officeCode WHERE T2.city = 'Tokyo' AND T1.jobTitle = 'Sales Rep'
+    aql: []
+    complexity: null
+  - id: car_retails_30
+    dataset_id: car_retails
+    question: State the email of those who are staff of Murphy Diane whose number is 1002 and living in San Francisco
+    context: null
+    evidence: staff of = reportsTo = 1002; living in San Francisco means office city = 'San Francisco'; returns 2 employee emails
+    tags: []
+    sql:
+      - query: SELECT T1.email FROM employees AS T1 INNER JOIN offices AS T2 ON T1.officeCode = T2.officeCode WHERE T1.reportsTo = 1002 AND T2.city = 'San Francisco'
+    aql: []
+    complexity: null
+  - id: car_retails_31
+    dataset_id: car_retails
+    question: Determine the email and Code of employee who are working at United State, state MA
+    context: null
+    evidence: Code refers to employeeNumber; United State MA = country='USA' AND state='MA'; returns 2 employees in Boston office
+    tags: []
+    sql:
+      - query: SELECT T1.email, T1.employeeNumber FROM employees AS T1 INNER JOIN offices AS T2 ON T1.officeCode = T2.officeCode WHERE T2.state = 'MA' AND T2.country = 'USA'
+    aql: []
+    complexity: null
+  - id: car_retails_32
+    dataset_id: car_retails
+    question: How many Sales Manager who are working in Sydney? List out their email.
+    context: null
+    evidence: Sales Manager jobTitle LIKE '%Sales Manager%'; Sydney office city; returns 1 email so count is 1
+    tags: []
+    sql:
+      - query: SELECT T1.email FROM employees AS T1 INNER JOIN offices AS T2 ON T1.officeCode = T2.officeCode WHERE T1.jobTitle LIKE '%Sales Manager%' AND T2.city = 'Sydney'
+    aql: []
+    complexity: null
+  - id: car_retails_33
+    dataset_id: car_retails
+    question: How many employees who are living in Australia and have the credit limit under 200000? State their email address and countries where they are working.
+    context: null
+    evidence: NOTE Employees don't have credit limits, only customers do; interpreting as employees in Australia; 4 employees in Australia with emails
+    tags: []
+    sql:
+      - query: SELECT e.email, o.country FROM employees e JOIN offices o ON e.officeCode = o.officeCode WHERE o.country = 'Australia'
+    aql: []
+    complexity: null
+  - id: car_retails_34
+    dataset_id: car_retails
+    question: State 10 emails of UK Sales Rep who have the lowest credit limit.
+    context: null
+    evidence: NOTE Sales reps don't have credit limits; interpreting as UK-based sales reps; only 2 UK sales reps exist
+    tags: []
+    sql:
+      - query: SELECT e.email FROM employees e JOIN offices o ON e.officeCode = o.officeCode WHERE o.country = 'UK' AND e.jobTitle = 'Sales Rep' LIMIT 10
+    aql: []
+    complexity: null
+  - id: car_retails_35
+    dataset_id: car_retails
+    question: How many Australian customers who have credit line under 220000?
+    context: null
+    evidence: Australian = country='Australia'; credit line = creditLimit < 220000; counts 5 customers meeting both conditions
+    tags: []
+    sql:
+      - query: SELECT COUNT(creditLimit) FROM customers WHERE creditLimit < 220000 AND country = 'Australia'
+    aql: []
+    complexity: null
+  - id: car_retails_36
+    dataset_id: car_retails
+    question: List out 3 customer numbers who have highest amount payment
+    context: null
+    evidence: amount refers to total payment amount per customer; customers 141, 124, 114 with highest totals
+    tags: []
+    sql:
+      - query: SELECT customerNumber FROM (SELECT customerNumber, SUM(amount) as total_payment FROM payments GROUP BY customerNumber ORDER BY total_payment DESC LIMIT 3)
+    aql: []
+    complexity: null
+  - id: car_retails_37
+    dataset_id: car_retails
+    question: Determine the email and Code of employee who are working at United State, state CA
+    context: null
+    evidence: Code = employeeNumber; USA CA office; GROUP BY unnecessary as results already unique; returns 6 employees
+    tags: []
+    sql:
+      - query: SELECT T1.email, T1.employeeNumber FROM employees AS T1 INNER JOIN offices AS T2 ON T1.officeCode = T2.officeCode WHERE T2.country = 'USA' AND T2.state = 'CA' GROUP BY T1.email, T1.officeCode
+    aql: []
+    complexity: null
+  - id: car_retails_38
+    dataset_id: car_retails
+    question: List out full name of employees who are working in Boston?
+    context: null
+    evidence: Boston office city; full name = firstName + lastName; returns 2 employees
+    tags: []
+    sql:
+      - query: SELECT T1.firstName, T1.lastName FROM employees AS T1 INNER JOIN offices AS T2 ON T1.officeCode = T2.officeCode WHERE T2.city = 'Boston'
+    aql: []
+    complexity: null
+  - id: car_retails_39
+    dataset_id: car_retails
+    question: State top 3 emails of UK Sales Rep who have the highest credit limit.
+    context: null
+    evidence: NOTE Sales reps don't have credit limits; interpreting as UK-based sales reps; only 2 UK sales reps exist
+    tags: []
+    sql:
+      - query: SELECT DISTINCT e.email FROM employees e JOIN offices o ON e.officeCode = o.officeCode WHERE o.country = 'UK' AND e.jobTitle = 'Sales Rep' LIMIT 3
+    aql: []
+    complexity: null
+  - id: car_retails_40
+    dataset_id: car_retails
+    question: How many customers who are in Norway and have credit line under 220000?
+    context: null
+    evidence: Norway = country='Norway'; credit line = creditLimit < 220000; counts 1 customer meeting both conditions
+    tags: []
+    sql:
+      - query: SELECT COUNT(creditLimit) FROM customers WHERE creditLimit < 220000 AND country = 'Norway'
+    aql: []
+    complexity: null
+  - id: car_retails_41
+    dataset_id: car_retails
+    question: List out full name and email of employees who are working in Paris?
+    context: null
+    evidence: Paris office city; full name = firstName + lastName; returns 5 employees with emails
+    tags: []
+    sql:
+      - query: SELECT T1.firstName, T1.lastName, T1.email FROM employees AS T1 INNER JOIN offices AS T2 ON T1.officeCode = T2.officeCode WHERE T2.city = 'Paris'
+    aql: []
+    complexity: null
+  - id: car_retails_42
+    dataset_id: car_retails
+    question: List the product code of the top five motorcycles, by descending order, the number of quantity in stock.
+    context: null
+    evidence: Motorcycles = productLine; ordered by quantityInStock DESC; returns top 5 with highest stock
+    tags: []
+    sql:
+      - query: SELECT productCode, quantityInStock FROM products WHERE productLine = 'Motorcycles' ORDER BY quantityInStock DESC LIMIT 5
+    aql: []
+    complexity: null
+  - id: car_retails_43
+    dataset_id: car_retails
+    question: Among the German customers, how many of the them has credit limit of zero?
+    context: null
+    evidence: German = country='Germany'; creditLimit = 0; counts 10 customers meeting both conditions
+    tags: []
+    sql:
+      - query: SELECT COUNT(customerNumber) FROM customers WHERE creditLimit = 0 AND country = 'Germany'
+    aql: []
+    complexity: null
+  - id: car_retails_44
+    dataset_id: car_retails
+    question: From 2003 to 2004, how many customers have paid more than three times?
+    context: null
+    evidence: paymentDate years 2003-2004; paid more than 3 times = COUNT(customerNumber) > 3; counts 7 customers
+    tags: []
+    sql:
+      - query: SELECT COUNT(customernumber) FROM ( SELECT customernumber FROM payments WHERE STRFTIME('%Y', paymentDate) >= '2003' AND STRFTIME('%Y', paymentDate) <= '2004' GROUP BY customernumber HAVING COUNT(customernumber) > 3 ) T
+    aql: []
+    complexity: null
+  - id: car_retails_45
+    dataset_id: car_retails
+    question: What is the average actual profit by 1937 Lincoln Berline?
+    context: null
+    evidence: actual profit = priceEach - buyPrice; 1937 Lincoln Berline is productName; averages profit across 14 order lines
+    tags: []
+    sql:
+      - query: SELECT SUM(T1.priceEach - T2.buyPrice) / COUNT(*) FROM orderdetails AS T1 INNER JOIN products AS T2 ON T1.productCode = T2.productCode WHERE T2.productName = '1937 Lincoln Berline'
+    aql: []
+    complexity: null
+  - id: car_retails_46
+    dataset_id: car_retails
+    question: Among the motorcycles with product scale of 1:10, which of them is the most ordered by American customers?
+    context: null
+    evidence: Motorcycles = productLine; scale 1:10; American = country='USA'; most ordered by SUM(quantityOrdered) DESC
+    tags: []
+    sql:
+      - query: SELECT T1.productName FROM products AS T1 INNER JOIN orderdetails AS T2 ON T1.productCode = T2.productCode INNER JOIN orders AS T3 ON T2.orderNumber = T3.orderNumber INNER JOIN customers AS T4 ON T3.customerNumber = T4.customerNumber WHERE T1.productLine = 'Motorcycles' AND T1.productScale = '1:10' AND T4.country = 'USA' GROUP BY T1.productName ORDER BY SUM(T2.quantityOrdered) DESC LIMIT 1
+    aql: []
+    complexity: null
+  - id: car_retails_47
+    dataset_id: car_retails
+    question: Between 8/1/2003 and 8/30/2004, how many checks were issued by Mini Gifts Distributors Ltd.? Please list their check numbers.
+    context: null
+    evidence: paymentDate between 2003-08-01 and 2004-08-30; Mini Gifts Distributors Ltd. is customerName; returns 4 check numbers
+    tags: []
+    sql:
+      - query: SELECT T1.checkNumber FROM payments AS T1 INNER JOIN customers AS T2 ON T1.customerNumber = T2.customerNumber WHERE T1.paymentDate >= '2003-08-01' AND T1.paymentDate <= '2004-08-30' AND T2.customerName = 'Mini Gifts Distributors Ltd.'
+    aql: []
+    complexity: null
+  - id: car_retails_48
+    dataset_id: car_retails
+    question: For the planes which has the hightest total price, how much it exceeds the average?
+    context: null
+    evidence: 1980s Black Hawk Helicopter has highest total revenue $144,959.91, exceeds average plane revenue by $65,406.78
+    tags: []
+    sql:
+      - query: WITH plane_revenues AS (SELECT p.productCode, p.productName, SUM(od.quantityOrdered * od.priceEach) as total_revenue FROM products p INNER JOIN orderdetails od ON p.productCode = od.productCode WHERE p.productLine = 'Planes' GROUP BY p.productCode, p.productName), avg_revenue AS (SELECT AVG(total_revenue) as avg_revenue FROM plane_revenues) SELECT pr.productName, pr.total_revenue as highest_total, ar.avg_revenue, pr.total_revenue - ar.avg_revenue as exceeds_average FROM plane_revenues pr CROSS JOIN avg_revenue ar ORDER BY pr.total_revenue DESC LIMIT 1
+    aql: []
+    complexity: null
+  - id: car_retails_49
+    dataset_id: car_retails
+    question: What is the total value of shipped vintage car orders from 2003-2004?
+    context: null
+    evidence: status = 'Shipped'; orderDate 2003-2004; productLine = 'Vintage Cars'; total value $1,430,306.02
+    tags: []
+    sql:
+      - query: SELECT SUM(T2.priceEach * T2.quantityOrdered) FROM products AS T1 INNER JOIN orderdetails AS T2 ON T1.productCode = T2.productCode INNER JOIN orders AS T3 ON T2.orderNumber = T3.orderNumber WHERE T3.status = 'Shipped' AND T3.orderDate BETWEEN '2003-01-01' AND '2004-12-31' AND T1.productLine = 'Vintage Cars'
+    aql: []
+    complexity: null
+  - id: car_retails_50
+    dataset_id: car_retails
+    question: Who is the sales agent of the customer who has made the highest payment? Include the full names of employee and his/her supervisor.
+    context: null
+    evidence: highest payment = MAX(amount); returns agent Gerard Hernandez and supervisor ID 1102 but NOT supervisor's full name
+    tags: []
+    sql:
+      - query: SELECT T1.firstName, T1.lastName, T1.reportsTo FROM employees AS T1 INNER JOIN customers AS T2 ON T1.employeeNumber = T2.salesRepEmployeeNumber INNER JOIN payments AS T3 ON T2.customerNumber = T3.customerNumber ORDER BY T3.amount DESC LIMIT 1
+    aql: []
+    complexity: null
+  - id: car_retails_51
+    dataset_id: car_retails
+    question: What is the highest amount of order made by the sales representative in Boston? Please give the name of the product and amount.
+    context: null
+    evidence: Boston = customer city; highest amount = $6,195.64 for 1998 Chrysler Plymouth Prowler
+    tags: []
+    sql:
+      - query: SELECT T2.productName, T1.quantityOrdered * T1.priceEach as amount FROM orderdetails AS T1 INNER JOIN products AS T2 ON T1.productCode = T2.productCode INNER JOIN orders AS T3 ON T1.orderNumber = T3.orderNumber INNER JOIN customers AS T4 ON T3.customerNumber = T4.customerNumber WHERE T4.city = 'Boston' AND T4.salesRepEmployeeNumber IN ( SELECT employeeNumber FROM employees WHERE jobTitle = 'Sales Rep' ) ORDER BY T1.quantityOrdered * T1.priceEach DESC LIMIT 1
+    aql: []
+    complexity: null
+  - id: car_retails_52
+    dataset_id: car_retails
+    question: What is the total actual profit gained from orders made by American customers from 2003-01-06 to 2005-05-09?
+    context: null
+    evidence: American customers = country='USA'; profit = (priceEach - buyPrice) * quantityOrdered; total profit $1,302,389.17
+    tags: []
+    sql:
+      - query: SELECT SUM((T2.priceEach - T1.buyPrice) * T2.quantityOrdered) FROM products AS T1 INNER JOIN orderdetails AS T2 ON T1.productCode = T2.productCode INNER JOIN orders AS T3 ON T2.orderNumber = T3.orderNumber INNER JOIN customers AS T4 ON T3.customerNumber = T4.customerNumber WHERE T3.orderDate >= '2003-01-06' AND T3.orderDate <= '2005-05-09' AND T4.country = 'USA'
+    aql: []
+    complexity: null
+  - id: car_retails_53
+    dataset_id: car_retails
+    question: From which branch does the sales representative employee who made the most sales in 2005? Please indicates its full address and phone number.
+    context: null
+    evidence: Paris office; 43 Rue Jouffroy D'abbans, Paris, France 75017; phone +33 14 723 4404
+    tags: []
+    sql:
+      - query: WITH sales_by_rep AS (SELECT e.employeeNumber, e.firstName, e.lastName, e.officeCode, SUM(od.quantityOrdered * od.priceEach) as total_sales FROM employees e INNER JOIN customers c ON e.employeeNumber = c.salesRepEmployeeNumber INNER JOIN orders o ON c.customerNumber = o.customerNumber INNER JOIN orderdetails od ON o.orderNumber = od.orderNumber WHERE e.jobTitle = 'Sales Rep' AND STRFTIME('%Y', o.orderDate) = '2005' GROUP BY e.employeeNumber, e.firstName, e.lastName, e.officeCode) SELECT CONCAT(o.addressLine1, CASE WHEN o.addressLine2 IS NOT NULL THEN ', ' || o.addressLine2 ELSE '' END, ', ', o.city, ', ', CASE WHEN o.state IS NOT NULL THEN o.state || ', ' ELSE '' END, o.country, ' ', o.postalCode) as full_address, o.phone FROM sales_by_rep sr INNER JOIN offices o ON sr.officeCode = o.officeCode ORDER BY sr.total_sales DESC LIMIT 1
+    aql: []
+    complexity: null
+  - id: car_retails_54
+    dataset_id: car_retails
+    question: What is the phone number of all companies where the last name of the contact person starts with the letter M and are not from Germany?
+    context: null
+    evidence: contactLastName LIKE 'M%'; country != 'Germany'; returns 7 phone numbers
+    tags: []
+    sql:
+      - query: SELECT phone FROM customers WHERE contactLastName LIKE 'M%' AND country != 'Germany'
+    aql: []
+    complexity: null
+  - id: car_retails_55
+    dataset_id: car_retails
+    question: Calculate the average amount of payments made by customers during the first half of 2004.
+    context: null
+    evidence: first half 2004 = paymentDate BETWEEN '2004-01-01' AND '2004-06-30'; average amount = 27936.61
+    tags: []
+    sql:
+      - query: SELECT AVG(amount) FROM payments WHERE paymentDate BETWEEN '2004-01-01' AND '2004-06-30'
+    aql: []
+    complexity: null
+  - id: car_retails_56
+    dataset_id: car_retails
+    question: Of all the orders placed and shipped throughout the year 2005, what percentage of those orders corresponds to customer number 186?
+    context: null
+    evidence: shipped in 2005 = status='Shipped' AND shippedDate BETWEEN '2005-01-01' AND '2005-12-31'; customer 186 = 2% of shipped orders
+    tags: []
+    sql:
+      - query: SELECT CAST(SUM(CASE WHEN customerNumber = 186 THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(orderNumber) FROM orders WHERE status = 'Shipped' AND shippedDate BETWEEN '2005-01-01' AND '2005-12-31'
+    aql: []
+    complexity: null
+  - id: car_retails_57
+    dataset_id: car_retails
+    question: How many customers with a canceled shipment have a credit limit greater than 115,000?
+    context: null
+    evidence: cancelled = status='Cancelled'; creditLimit > 115000; counts 2 customers meeting both conditions
+    tags: []
+    sql:
+      - query: SELECT COUNT(T1.customerNumber) FROM customers AS T1 INNER JOIN orders AS T2 ON T1.customerNumber = T2.customerNumber WHERE T2.status = 'Cancelled' AND T1.creditLimit > 115000
+    aql: []
+    complexity: null
+  - id: car_retails_58
+    dataset_id: car_retails
+    question: On what date did the customer with the lowest credit limit serviced by sales representative Barry Jones make payments for his/her orders?
+    context: null
+    evidence: Barry Jones = firstName='Barry' AND lastName='Jones'; lowest credit limit customer; payment date 2004-12-12
+    tags: []
+    sql:
+      - query: SELECT T3.paymentDate FROM employees AS T1 INNER JOIN customers AS T2 ON T1.employeeNumber = T2.salesRepEmployeeNumber INNER JOIN payments AS T3 ON T2.customerNumber = T3.customerNumber WHERE T1.firstName = 'Barry' AND T1.lastName = 'Jones' AND T1.jobTitle = 'Sales Rep' ORDER BY T2.creditLimit ASC LIMIT 1
+    aql: []
+    complexity: null
+  - id: car_retails_59
+    dataset_id: car_retails
+    question: To whom does the employee have to inform that is the sales representative of the French customer?
+    context: null
+    evidence: French customer = country='France'; reportsTo = manager ID; all French customer sales reps report to 1102
+    tags: []
+    sql:
+      - query: SELECT T1.reportsTo FROM employees AS T1 INNER JOIN customers AS T2 ON T1.employeeNumber = T2.salesRepEmployeeNumber WHERE T2.country = 'France'
+    aql: []
+    complexity: null
+  - id: car_retails_60
+    dataset_id: car_retails
+    question: What is the full address of the customer who commented that DHL be used for the order that was shipped on April 4, 2005?
+    context: null
+    evidence: shippedDate='2005-04-04'; comments LIKE '%DHL%'; full address 3086 Ingle Ln., San Jose, CA, USA 94217
+    tags: []
+    sql:
+      - query: SELECT T1.addressLine1, T1.addressLine2, T1.city, T1.state, T1.country, T1.postalCode FROM customers AS T1 INNER JOIN orders AS T2 ON T1.customerNumber = T2.customerNumber WHERE T2.shippedDate = '2005-04-04' AND T2.status = 'Shipped' AND T2.comments LIKE '%DHL%'
+    aql: []
+    complexity: null
+  - id: car_retails_61
+    dataset_id: car_retails
+    question: What is the full address of the office where the employee who is a sales representative for the customer whose business is located in the city of New York works?
+    context: null
+    evidence: NYC = New York City; finds office address of Sales Reps serving NYC customers; returns 523 East 53rd Street apt. 5A (NYC office)
+    tags: []
+    sql:
+      - query: SELECT T3.addressLine1, T3.addressLine2 FROM employees AS T1 INNER JOIN customers AS T2 ON T1.employeeNumber = T2.salesRepEmployeeNumber INNER JOIN offices AS T3 ON T1.officeCode = T3.officeCode WHERE T2.city = 'NYC' AND T1.jobTitle = 'Sales Rep'
+    aql: []
+    complexity: null
+  - id: car_retails_62
+    dataset_id: car_retails
+    question: What is the full address of the office where 4 people work and one of them is Sales Representation?
+    context: null
+    evidence: Finds office with exactly 4 employees where at least 1 is Sales Rep; Sydney office at 5-11 Wentworth Avenue Floor #2; NOTE original query incorrect
+    tags: []
+    sql:
+      - query: SELECT o.addressLine1, o.addressLine2 FROM offices o WHERE o.officeCode IN (SELECT officeCode FROM employees GROUP BY officeCode HAVING COUNT(*) = 4 AND SUM(CASE WHEN jobTitle = 'Sales Rep' THEN 1 ELSE 0 END) >= 1)
+    aql: []
+    complexity: null
+  - id: car_retails_63
+    dataset_id: car_retails
+    question: What profit can the seller Carousel DieCast Legends make from the sale of the product described as "The perfect holiday or anniversary gift for executives"?
+    context: null
+    evidence: seller = productVendor; profit = MSRP - buyPrice; finds products matching description text; total profit potential $89.63
+    tags: []
+    sql:
+      - query: SELECT SUM(T2.MSRP - T2.buyPrice) FROM productlines AS T1 INNER JOIN products AS T2 ON T1.productLine = T2.productLine WHERE T2.productVendor = 'Carousel DieCast Legends' AND T1.textDescription LIKE '%perfect holiday or anniversary gift for executives%'
+    aql: []
+    complexity: null
+  - id: car_retails_64
+    dataset_id: car_retails
+    question: Of the clients whose businesses are located in the city of Boston, calculate which of them has a higher average amount of payment.
+    context: null
+    evidence: Boston customers; highest average payment per transaction; customer 495 has highest avg; NOTE query shows highest not comparison
+    tags: []
+    sql:
+      - query: SELECT T1.customerNumber FROM customers AS T1 INNER JOIN payments AS T2 ON T1.customerNumber = T2.customerNumber WHERE T1.city = 'Boston' GROUP BY T1.customerNumber ORDER BY SUM(T2.amount) / COUNT(T2.paymentDate) DESC LIMIT 1
+    aql: []
+    complexity: null
+  - id: car_retails_65
+    dataset_id: car_retails
+    question: Calculate the total quantity ordered for 18th Century Vintage Horse Carriage and the average price.
+    context: null
+    evidence: Product '18th Century Vintage Horse Carriage'; total ordered 907 units across 28 orders; weighted average price $94.08
+    tags: []
+    sql:
+      - query: SELECT SUM(T2.quantityOrdered) , SUM(T2.quantityOrdered * T2.priceEach) / SUM(T2.quantityOrdered) FROM products AS T1 INNER JOIN orderdetails AS T2 ON T1.productCode = T2.productCode WHERE T1.productName = '18th Century Vintage Horse Carriage'
+    aql: []
+    complexity: null
+  - id: car_retails_66
+    dataset_id: car_retails
+    question: How many kinds of products did order No. 10252 contain?
+    context: null
+    evidence: Products refer to productCode; order 10252 contains 9 different products
+    tags: []
+    sql:
+      - query: SELECT COUNT(t.productCode) FROM orderdetails t WHERE t.orderNumber = '10252'
+    aql: []
+    complexity: null
+  - id: car_retails_67
+    dataset_id: car_retails
+    question: Who is the sales representative that made the order which was sent to 25 Maiden Lane, Floor No. 4?
+    context: null
+    evidence: Sales representative is an employee; Barry Jones; verified customer has orders
+    tags: []
+    sql:
+      - query: SELECT DISTINCT T2.firstName, T2.lastName FROM customers AS T1 INNER JOIN employees AS T2 ON T1.salesRepEmployeeNumber = T2.employeeNumber INNER JOIN orders AS T3 ON T1.customerNumber = T3.customerNumber WHERE T1.addressLine1 = '25 Maiden Lane' AND T1.addressLine2 = 'Floor No. 4'
+    aql: []
+    complexity: null
+  - id: car_retails_68
+    dataset_id: car_retails
+    question: Where's Foon Yue Tseng's office located at? Give the detailed address.
+    context: null
+    evidence: Detailed address comprises all address fields; 523 East 53rd Street apt. 5A, NYC, NY, USA, 10022
+    tags: []
+    sql:
+      - query: SELECT T1.addressLine1, T1.addressLine2, T1.city, T1.state, T1.country, T1.postalCode FROM offices AS T1 INNER JOIN employees AS T2 ON T1.officeCode = T2.officeCode WHERE T2.firstName = 'Foon Yue' AND T2.lastName = 'Tseng'
+    aql: []
+    complexity: null
+  - id: car_retails_69
+    dataset_id: car_retails
+    question: Compared with the orders happened on 2005-04-08 and two days later, which day's order had a higher value?
+    context: null
+    evidence: 2005-04-08 total $78,685.75; no orders on 2005-04-10; 2005-04-08 has higher value
+    tags: []
+    sql:
+      - query: SELECT T2.orderDate, SUM(T1.quantityOrdered * T1.priceEach) as daily_total FROM orderdetails AS T1 INNER JOIN orders AS T2 ON T1.orderNumber = T2.orderNumber WHERE T2.orderDate IN ('2005-04-08', '2005-04-10') GROUP BY T2.orderDate ORDER BY daily_total DESC
+    aql: []
+    complexity: null
+  - id: car_retails_70
+    dataset_id: car_retails
+    question: How many products with the highest expected profits were sold in total?
+    context: null
+    evidence: Products refer to productCode; Expected profits = MSRP - buyPrice; 961 units sold; NOTE query uses LIMIT 1 for single highest profit product
+    tags: []
+    sql:
+      - query: SELECT SUM(t2.quantityOrdered) FROM orderdetails AS t2 INNER JOIN ( SELECT t1.productCode FROM products AS t1 ORDER BY t1.MSRP - t1.buyPrice DESC LIMIT 1 ) AS t3 ON t2.productCode = t3.productCode
+    aql: []
+    complexity: null
+  - id: car_retails_71
+    dataset_id: car_retails
+    question: How much did Petit Auto pay on 2004-08-09?
+    context: null
+    evidence: Petit Auto is name of customer; paymentDate = '2004-08-09'; payment amount $45,352.47
+    tags: []
+    sql:
+      - query: SELECT t1.amount FROM payments AS t1 INNER JOIN customers AS t2 ON t1.customerNumber = t2.customerNumber WHERE t2.customerName = 'Petit Auto' AND t1.paymentDate = '2004-08-09'
+    aql: []
+    complexity: null
+  - id: car_retails_72
+    dataset_id: car_retails
+    question: What was the contact name for the check "NR157385"?
+    context: null
+    evidence: Contact name refers to customerName; Jan Klaeboe; NOTE evidence incorrect - query returns contactFirstName/contactLastName not customerName
+    tags: []
+    sql:
+      - query: SELECT t2.contactFirstName, t2.contactLastName FROM payments AS t1 INNER JOIN customers AS t2 ON t1.customerNumber = t2.customerNumber WHERE t1.checkNumber = 'NR157385'
+    aql: []
+    complexity: null
+  - id: car_retails_73
+    dataset_id: car_retails
+    question: Which customer made the order No. 10160? Give the contact name.
+    context: null
+    evidence: Order 10160 made by customer; contact name is Brian Chandler
+    tags: []
+    sql:
+      - query: SELECT t2.contactFirstName, t2.contactLastName FROM orders AS t1 INNER JOIN customers AS t2 ON t1.customerNumber = t2.customerNumber WHERE t1.orderNumber = '10160'
+    aql: []
+    complexity: null
+  - id: car_retails_74
+    dataset_id: car_retails
+    question: Where was the order No. 10383 shipped to? Show me the address.
+    context: null
+    evidence: Address comprises addressLine1 and addressLine2; C/ Moralzarzal, 86; NOTE query assumes shipping address = customer address
+    tags: []
+    sql:
+      - query: SELECT t2.addressLine1, t2.addressLine2 FROM orders AS t1 INNER JOIN customers AS t2 ON t1.customerNumber = t2.customerNumber WHERE t1.orderNumber = '10383'
+    aql: []
+    complexity: null
+  - id: car_retails_75
+    dataset_id: car_retails
+    question: For the productline where the product No.S18_2949 was produced, what's the text description for that product line?
+    context: null
+    evidence: Product S18_2949 is from Vintage Cars line; description about 1900s-1940s automobile models
+    tags: []
+    sql:
+      - query: SELECT t1.textDescription FROM productlines AS t1 INNER JOIN products AS t2 ON t1.productLine = t2.productLine WHERE t2.productCode = 'S18_2949'
+    aql: []
+    complexity: null
+  - id: car_retails_76
+    dataset_id: car_retails
+    question: If Dragon Souveniers, Ltd. aren't satisfied with their order and want to send a complain e-mail, which e-mail address should they send to?
+    context: null
+    evidence: E-mail address belongs to employee; customerName = 'Dragon Souveniers, Ltd.'; sales rep email mnishi@classicmodelcars.com
+    tags: []
+    sql:
+      - query: SELECT t2.email FROM customers AS t1 INNER JOIN employees AS t2 ON t1.salesRepEmployeeNumber = t2.employeeNumber WHERE t1.customerName = 'Dragon Souveniers, Ltd.'
+    aql: []
+    complexity: null
+  - id: car_retails_77
+    dataset_id: car_retails
+    question: How many French customers does Gerard Hernandez take care of?
+    context: null
+    evidence: Gerard Hernandez is an employee; French customer = country 'France'; 6 customers; NOTE typo in original "Gerakd Hermandez"
+    tags: []
+    sql:
+      - query: SELECT COUNT(t1.customerNumber) FROM customers AS t1 INNER JOIN employees AS t2 ON t1.salesRepEmployeeNumber = t2.employeeNumber WHERE t1.country = 'France' AND t2.firstName = 'Gerard' AND t2.lastName = 'Hernandez'
+    aql: []
+    complexity: null
+  - id: car_retails_78
+    dataset_id: car_retails
+    question: What was the latest order that customer No.114 made? Give the name of the product.
+    context: null
+    evidence: The latest refers to the most recent orderDate; 1952 Alpine Renault 1300; NOTE query returns only one product from potentially multiple in order
+    tags: []
+    sql:
+      - query: SELECT t3.productName FROM orderdetails AS t1 INNER JOIN orders AS t2 ON t1.orderNumber = t2.orderNumber INNER JOIN products AS t3 ON t1.productCode = t3.productCode WHERE t2.customerNumber = '114' ORDER BY t2.orderDate DESC LIMIT 1
+    aql: []
+    complexity: null
+  - id: car_retails_79
+    dataset_id: car_retails
+    question: For the product No. S18_3482 in the Order No.10108, how much discount did the customer have?
+    context: null
+    evidence: DIVIDE(SUBTRACT(MSRP, priceEach)), MSRP); product No. S18_3482 = productCode 'S18_3482'; 10% discount (MSRP $146.99, priceEach $132.29)
+    tags: []
+    sql:
+      - query: SELECT (t1.MSRP - t2.priceEach) / t1.MSRP FROM products AS t1 INNER JOIN orderdetails AS t2 ON t1.productCode = t2.productCode WHERE t1.productCode = 'S18_3482' AND t2.orderNumber = 10108
+    aql: []
+    complexity: null
+  - id: car_retails_80
+    dataset_id: car_retails
+    question: To whom does Steve Patterson report? Please give his or her full name.
+    context: null
+    evidence: reportsTo is the leader of the employeeNumber; Steve Patterson reports to Anthony Bow
+    tags: []
+    sql:
+      - query: SELECT t2.firstName, t2.lastName FROM employees AS t1 INNER JOIN employees AS t2 ON t2.employeeNumber = t1.reportsTo WHERE t1.firstName = 'Steve' AND t1.lastName = 'Patterson'
+    aql: []
+    complexity: null
+  - id: car_retails_81
+    dataset_id: car_retails
+    question: How do I contact the President of the company?
+    context: null
+    evidence: President refers to the jobTitle; email dmurphy@classicmodelcars.com
+    tags: []
+    sql:
+      - query: SELECT t.email FROM employees t WHERE t.jobTitle = 'President'
+    aql: []
+    complexity: null
+  - id: car_retails_82
+    dataset_id: car_retails
+    question: Who is the sales representitive of Muscle Machine Inc? Please give the employee's full name.
+    context: null
+    evidence: Sales representative refers to jobTitle = 'Sales Rep'; Muscle Machine Inc is name of customer; Foon Yue Tseng
+    tags: []
+    sql:
+      - query: SELECT t2.firstName, t2.lastName FROM customers AS t1 INNER JOIN employees AS t2 ON t1.salesRepEmployeeNumber = t2.employeeNumber WHERE t1.customerName = 'Muscle Machine Inc' AND t2.jobTitle = 'Sales Rep'
+    aql: []
+    complexity: null
+  - id: car_retails_83
+    dataset_id: car_retails
+    question: If I'm from the Muscle Machine Inc, to which e-mail adress should I write a letter if I want to reach the superior of my sales representitive?
+    context: null
+    evidence: Muscle Machine Inc is name of customer; superior refers to 'reportsTO'; superior email abow@classicmodelcars.com (Anthony Bow)
+    tags: []
+    sql:
+      - query: SELECT t3.email FROM customers AS t1 INNER JOIN employees AS t2 ON t1.salesRepEmployeeNumber = t2.employeeNumber INNER JOIN employees AS t3 ON t2.reportsTo = t3.employeeNumber WHERE t1.customerName = 'Muscle Machine Inc'
+    aql: []
+    complexity: null
+  - id: car_retails_84
+    dataset_id: car_retails
+    question: Please list all the customers that have Steve Patterson as their sales representitive.
+    context: null
+    evidence: Steve Patterson is an employee; 6 customers including Diecast Classics Inc., Auto-Moto Classics Inc.
+    tags: []
+    sql:
+      - query: SELECT t1.customerName FROM customers AS t1 INNER JOIN employees AS t2 ON t1.salesRepEmployeeNumber = t2.employeeNumber WHERE t2.firstName = 'Steve' AND t2.lastName = 'Patterson'
+    aql: []
+    complexity: null
+  - id: car_retails_85
+    dataset_id: car_retails
+    question: How many customers have an employee who reports to William Patterson as their sales representitive?
+    context: null
+    evidence: reportsTO' is the leader of the 'employeeNumber'; 10 customers whose sales reps report to William Patterson
+    tags: []
+    sql:
+      - query: SELECT COUNT(t1.customerNumber) FROM customers AS t1 INNER JOIN employees AS t2 ON t1.salesRepEmployeeNumber = t2.employeeNumber INNER JOIN employees AS t3 ON t2.reportsTo = t3.employeeNumber WHERE t3.firstName = 'William' AND t3.lastName = 'Patterson'
+    aql: []
+    complexity: null
+  - id: car_retails_86
+    dataset_id: car_retails
+    question: Please list the phone numbers of the top 3 customers that have the highest credit limit and have Leslie Jennings as their sales representitive.
+    context: null
+    evidence: Leslie Jennings is sales rep; top 3 by credit limit; phones 4155551450, 6505551386, 6505556809
+    tags: []
+    sql:
+      - query: SELECT t1.phone FROM customers AS t1 INNER JOIN employees AS t2 ON t1.salesRepEmployeeNumber = t2.employeeNumber WHERE t2.firstName = 'Leslie' AND t2.lastName = 'Jennings' ORDER BY t1.creditLimit DESC LIMIT 3
+    aql: []
+    complexity: null
+  - id: car_retails_87
+    dataset_id: car_retails
+    question: How many sales representitives are based in the offices in the USA?
+    context: null
+    evidence: Sales representative refers to jobTitle = 'Sales Rep'; country = 'USA'; 6 sales reps in USA offices
+    tags: []
+    sql:
+      - query: SELECT COUNT(t1.employeeNumber) FROM employees AS t1 INNER JOIN offices AS t2 ON t1.officeCode = t2.officeCode WHERE t2.country = 'USA' AND t1.jobTitle = 'Sales Rep'
+    aql: []
+    complexity: null
+  - id: car_retails_88
+    dataset_id: car_retails
+    question: Where can I find the office of the President of the company?
+    context: null
+    evidence: Where can I find the office refers to address, comprising of addressLine1 and addressLine2; President is a jobTitle; 100 Market Street Suite 300; NOTE incomplete - missing city/state/country
+    tags: []
+    sql:
+      - query: SELECT t2.addressLine1, t2.addressLine2 FROM employees AS t1 INNER JOIN offices AS t2 ON t1.officeCode = t2.officeCode WHERE t1.jobTitle = 'President'
+    aql: []
+    complexity: null
+  - id: car_retails_89
+    dataset_id: car_retails
+    question: What's the postal code of the office the VP Sales is at?
+    context: null
+    evidence: VP Sales refers to jobTitle; postal code 94080
+    tags: []
+    sql:
+      - query: SELECT t2.postalCode FROM employees AS t1 INNER JOIN offices AS t2 ON t1.officeCode = t2.officeCode WHERE t1.jobTitle = 'VP Sales'
+    aql: []
+    complexity: null
+  - id: car_retails_90
+    dataset_id: car_retails
+    question: What is the total price of the order made by Cruz & Sons Co. on 2003/3/3?
+    context: null
+    evidence: SUM(MULTIPLY(quantityOrdered, priceEach)) where orderDate = '2003-03-03'; customerName = 'Cruz & Sons Co.'; total $51,001.22
+    tags: []
+    sql:
+      - query: SELECT SUM(t1.priceEach * t1.quantityOrdered) FROM orderdetails AS t1 INNER JOIN orders AS t2 ON t1.orderNumber = t2.orderNumber INNER JOIN customers AS t3 ON t2.customerNumber = t3.customerNumber WHERE t3.customerName = 'Cruz & Sons Co.' AND t2.orderDate = '2003-03-03'
+    aql: []
+    complexity: null
+  - id: car_retails_91
+    dataset_id: car_retails
+    question: What is the total value of cancelled orders?
+    context: null
+    evidence: total value = SUM(MULTIPLY(quantityOrdered, priceEach)); cancelled orders refers to status = 'Cancelled'; result $238,854.18
+    tags: []
+    sql:
+      - query: SELECT SUM(T1.quantityOrdered * T1.priceEach) FROM orderdetails AS T1 INNER JOIN orders AS T2 ON T1.orderNumber = T2.orderNumber WHERE T2.status = 'Cancelled'
+    aql: []
+    complexity: null
+  - id: car_retails_92
+    dataset_id: car_retails
+    question: Please calculate the total value of Motorcycles orders.
+    context: null
+    evidence: Motorcycles is a product line; total value = SUM(MULTIPLY(quantityOrdered, priceEach)); result $1,121,426.12
+    tags: []
+    sql:
+      - query: SELECT SUM(T1.quantityOrdered * T1.priceEach) FROM orderdetails AS T1 INNER JOIN products AS T2 ON T1.productCode = T2.productCode WHERE T2.productLine = 'Motorcycles'
+    aql: []
+    complexity: null
+  - id: car_retails_93
+    dataset_id: car_retails
+    question: How many Planes orders were there?
+    context: null
+    evidence: Planes is a product line; 66 distinct orders containing Planes products
+    tags: []
+    sql:
+      - query: SELECT COUNT(DISTINCT T1.orderNumber) FROM orderdetails AS T1 INNER JOIN products AS T2 ON T1.productCode = T2.productCode WHERE T2.productLine = 'Planes'
+    aql: []
+    complexity: null
+  - id: car_retails_94
+    dataset_id: car_retails
+    question: How many orders which expected profits greater than 100?
+    context: null
+    evidence: expected profits = (MSRP - buyPrice) > 100; 83 distinct orders containing products with profit margin > 100
+    tags: []
+    sql:
+      - query: SELECT COUNT(DISTINCT T1.orderNumber) FROM orderdetails AS T1 INNER JOIN products AS T2 ON T1.productCode = T2.productCode WHERE T2.MSRP - T2.buyPrice > 100
+    aql: []
+    complexity: null
+  - id: car_retails_95
+    dataset_id: car_retails
+    question: Please calculate the average total price of orders from Exoto Designs Vendor in 2005.
+    context: null
+    evidence: productVendor = 'Exoto Designs'; year 2005; $4,972.79 average per order
+    tags: []
+    sql:
+      - query: SELECT AVG(order_total) FROM (SELECT T3.orderNumber, SUM(T2.quantityOrdered * T2.priceEach) as order_total FROM products AS T1 INNER JOIN orderdetails AS T2 ON T1.productCode = T2.productCode INNER JOIN orders AS T3 ON T2.orderNumber = T3.orderNumber WHERE T1.productVendor = 'Exoto Designs' AND STRFTIME('%Y', T3.orderDate) = '2005' GROUP BY T3.orderNumber)
+    aql: []
+    complexity: null
+  - id: car_retails_96
+    dataset_id: car_retails
+    question: How many sales representatives who have office code is 1?
+    context: null
+    evidence: sales representative refers to jobTitle = 'Sales Rep'; officeCode = '1' (TEXT field); result 2
+    tags: []
+    sql:
+      - query: SELECT COUNT(officeCode) FROM employees WHERE jobTitle = 'Sales Rep' AND officeCode = '1'
+    aql: []
+    complexity: null
+  - id: car_retails_97
+    dataset_id: car_retails
+    question: Please list different customer names with the payment amount of over 50,000.
+    context: null
+    evidence: amount > 50000; 32 distinct customers
+    tags: []
+    sql:
+      - query: SELECT DISTINCT T2.customerName FROM payments AS T1 INNER JOIN customers AS T2 ON T1.customerNumber = T2.customerNumber WHERE T1.amount > 50000
+    aql: []
+    complexity: null
+  - id: car_retails_98
+    dataset_id: car_retails
+    question: Please calculate the total payment amount of customers who come from the USA.
+    context: null
+    evidence: USA is a country; total payment = SUM(amount); result $3,040,029.52
+    tags: []
+    sql:
+      - query: SELECT SUM(T1.amount) FROM payments AS T1 INNER JOIN customers AS T2 ON T1.customerNumber = T2.customerNumber WHERE T2.country = 'USA'
+    aql: []
+    complexity: null
+  - id: car_retails_99
+    dataset_id: car_retails
+    question: What are the total payments of customers with no credit limit in 2003?
+    context: null
+    evidence: no credit limit refers to creditLimit = 0; year 2003; result NULL (no matching payments)
+    tags: []
+    sql:
+      - query: SELECT SUM(amount) FROM payments WHERE STRFTIME('%Y', paymentDate) = '2003' AND customerNumber IN ( SELECT customerNumber FROM customers WHERE creditLimit = 0 )
+    aql: []
+    complexity: null
+  - id: car_retails_100
+    dataset_id: car_retails
+    question: Please list the name and phone number of the customer whose order was cancelled.
+    context: null
+    evidence: cancelled order refers to status = 'Cancelled'; 6 customers with cancelled orders
+    tags: []
+    sql:
+      - query: SELECT T2.customerName, T2.phone FROM orders AS T1 INNER JOIN customers AS T2 ON T1.customerNumber = T2.customerNumber WHERE T1.status = 'Cancelled'
+    aql: []
+    complexity: null

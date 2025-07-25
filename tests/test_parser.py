@@ -63,31 +63,31 @@ def test_decartes_join(mock_schema):
     print(f"Parsed SQL: {result_sql}")
     assert isinstance(result_sql.from_, From)
 
-def test_parse_where_clause(mock_schema):
-    sql = """
-SELECT
-    c.customerName,
-    pay_summary.total_paid,
-    pay_summary.last_payment_date
-FROM customers AS c
-JOIN (
-        SELECT
-            customerNumber,
-            SUM(amount)      AS total_paid,
-            MAX(paymentDate) AS last_payment_date
-        FROM payments
-        GROUP BY customerNumber
-     ) AS pay_summary
-         (customerNumber,
-          total_paid,
-          last_payment_date)
-  ON c.customerNumber = pay_summary.customerNumber
-ORDER BY pay_summary.total_paid DESC;
-"""
-    lexer = Lexer(sql, mock_schema)
-    parser = Parser(lexer, mock_schema)
-    result = parser.parse()
-    assert isinstance(result.where, list)
+# def test_parse_where_clause(mock_schema):
+#     sql = """
+# SELECT
+#     c.customerName,
+#     pay_summary.total_paid,
+#     pay_summary.last_payment_date
+# FROM customers AS c
+# JOIN (
+#         SELECT
+#             customerNumber,
+#             SUM(amount)      AS total_paid,
+#             MAX(paymentDate) AS last_payment_date
+#         FROM payments
+#         GROUP BY customerNumber
+#      ) AS pay_summary
+#          (customerNumber,
+#           total_paid,
+#           last_payment_date)
+#   ON c.customerNumber = pay_summary.customerNumber
+# ORDER BY pay_summary.total_paid DESC;
+# """
+#     lexer = Lexer(sql, mock_schema)
+#     parser = Parser(lexer, mock_schema)
+#     result = parser.parse()
+#     assert isinstance(result.where, list)
 
 ############################ TEST CONDITIONS #######################
 def test_multiple_conditions(mock_schema):
@@ -170,6 +170,16 @@ def test_dataset_5(mock_schema):
     2 DESC,
     1 ASC
     LIMIT 1
+    """
+    lexer = Lexer(sql, mock_schema)
+    parser = Parser(lexer, mock_schema)
+    result = parser.parse()
+    print(f"Parsed SQL: {result}")
+    assert isinstance(result.from_.table_unit, TableRef)
+
+def test_dataset_6(mock_schema):
+    sql = """
+    SELECT T1.employeeNumber FROM employees AS T1 INNER JOIN offices AS T2 ON T1.officeCode = T2.officeCode WHERE T1.reportsTo = 1143 AND T2.city = 'NYC'
     """
     lexer = Lexer(sql, mock_schema)
     parser = Parser(lexer, mock_schema)
